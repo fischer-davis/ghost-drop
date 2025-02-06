@@ -11,31 +11,23 @@ import {
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-export const createTable = pgTableCreator((name) => `self-auth_${name}`);
+export const createTable = pgTableCreator((name) => `file-dropper_${name}`);
 
 // ** Since using credentials manager you can't store session information in db so those tables will be empty. **
 // https://github.com/nextauthjs/next-auth/discussions/3196
 // https://next-auth.js.org/configuration/providers/credentials
 
-export const posts = createTable(
-  "post",
-  {
-    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("created_by", { length: 255 })
+export const files = createTable(
+  "files", {
+    id: text("id")
       .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  }),
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    filename: text("filename").notNull(),
+    filePath: text("file_path").notNull(), // Relative path to file
+    fileSize: integer("file_size").notNull(), // File size in bytes
+    uploadedAt: text("uploaded_at").default(new Date().toISOString()).notNull(),
+  }
 );
 
 export const users = createTable("user", {

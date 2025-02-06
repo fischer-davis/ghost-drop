@@ -8,6 +8,20 @@
       "when": 1737483314862,
       "tag": "0000_whole_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1738709376070,
+      "tag": "0001_eager_spirit",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1738709391758,
+      "tag": "0002_keen_eddie_brock",
+      "breakpoints": true
     }
   ]
 }
