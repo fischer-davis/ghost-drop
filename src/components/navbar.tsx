@@ -11,7 +11,7 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-bold text-primary">Logo</span>
+              <h1 className="font-bold">Ghost Drop</h1>
             </Link>
           </div>
           <div className="flex justify-center">
