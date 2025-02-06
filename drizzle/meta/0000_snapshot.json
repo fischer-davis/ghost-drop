@@ -1,102 +1,96 @@
 {
-  "id": "f05b45c3-86f2-4fb7-8a15-cc18df66f3eb",
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "19c9cc83-66aa-40d7-aa1a-9ea322701e61",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "7",
-  "dialect": "postgresql",
   "tables": {
-    "public.self-auth_account": {
-      "name": "self-auth_account",
-      "schema": "",
+    "ghost-drop_account": {
+      "name": "ghost-drop_account",
       "columns": {
         "userId": {
           "name": "userId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "provider": {
           "name": "provider",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "providerAccountId": {
           "name": "providerAccountId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "refresh_token": {
           "name": "refresh_token",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "access_token": {
           "name": "access_token",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "expires_at": {
           "name": "expires_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "token_type": {
           "name": "token_type",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "scope": {
           "name": "scope",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "id_token": {
           "name": "id_token",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "session_state": {
           "name": "session_state",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         }
       },
-      "indexes": {
-        "account_user_id_idx": {
-          "name": "account_user_id_idx",
-          "columns": [
-            {
-              "expression": "userId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
-        "self-auth_account_userId_self-auth_user_id_fk": {
-          "name": "self-auth_account_userId_self-auth_user_id_fk",
-          "tableFrom": "self-auth_account",
-          "tableTo": "self-auth_user",
+        "ghost-drop_account_userId_ghost-drop_user_id_fk": {
+          "name": "ghost-drop_account_userId_ghost-drop_user_id_fk",
+          "tableFrom": "ghost-drop_account",
+          "tableTo": "ghost-drop_user",
           "columnsFrom": [
             "userId"
           ],
@@ -108,218 +102,84 @@
         }
       },
       "compositePrimaryKeys": {
-        "self-auth_account_provider_providerAccountId_pk": {
-          "name": "self-auth_account_provider_providerAccountId_pk",
+        "ghost-drop_account_provider_providerAccountId_pk": {
           "columns": [
             "provider",
             "providerAccountId"
-          ]
+          ],
+          "name": "ghost-drop_account_provider_providerAccountId_pk"
         }
       },
       "uniqueConstraints": {}
     },
-    "public.self-auth_apiKey": {
-      "name": "self-auth_apiKey",
-      "schema": "",
+    "ghost-drop_apiKey": {
+      "name": "ghost-drop_apiKey",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "autoincrement": false
         },
         "keyId": {
           "name": "keyId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "keyHash": {
           "name": "keyHash",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "userId": {
           "name": "userId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "self-auth_apiKey_userId_self-auth_user_id_fk": {
-          "name": "self-auth_apiKey_userId_self-auth_user_id_fk",
-          "tableFrom": "self-auth_apiKey",
-          "tableTo": "self-auth_user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "self-auth_apiKey_keyId_unique": {
-          "name": "self-auth_apiKey_keyId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "keyId"
-          ]
-        },
-        "self-auth_apiKey_name_userId_unique": {
-          "name": "self-auth_apiKey_name_userId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name",
-            "userId"
-          ]
-        }
-      }
-    },
-    "public.self-auth_post": {
-      "name": "self-auth_post",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
           "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "self-auth_post_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_by": {
-          "name": "created_by",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
+          "autoincrement": false
         }
       },
       "indexes": {
-        "created_by_idx": {
-          "name": "created_by_idx",
+        "ghost-drop_apiKey_keyId_unique": {
+          "name": "ghost-drop_apiKey_keyId_unique",
           "columns": [
-            {
-              "expression": "created_by",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
+            "keyId"
           ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
+          "isUnique": true
         },
-        "name_idx": {
-          "name": "name_idx",
+        "ghost-drop_apiKey_name_userId_unique": {
+          "name": "ghost-drop_apiKey_name_userId_unique",
           "columns": [
-            {
-              "expression": "name",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
+            "name",
+            "userId"
           ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
+          "isUnique": true
         }
       },
       "foreignKeys": {
-        "self-auth_post_created_by_self-auth_user_id_fk": {
-          "name": "self-auth_post_created_by_self-auth_user_id_fk",
-          "tableFrom": "self-auth_post",
-          "tableTo": "self-auth_user",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.self-auth_session": {
-      "name": "self-auth_session",
-      "schema": "",
-      "columns": {
-        "session_token": {
-          "name": "session_token",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "expires": {
-          "name": "expires",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "self-auth_session_userId_self-auth_user_id_fk": {
-          "name": "self-auth_session_userId_self-auth_user_id_fk",
-          "tableFrom": "self-auth_session",
-          "tableTo": "self-auth_user",
+        "ghost-drop_apiKey_userId_ghost-drop_user_id_fk": {
+          "name": "ghost-drop_apiKey_userId_ghost-drop_user_id_fk",
+          "tableFrom": "ghost-drop_apiKey",
+          "tableTo": "ghost-drop_user",
           "columnsFrom": [
             "userId"
           ],
@@ -333,111 +193,208 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.self-auth_user": {
-      "name": "self-auth_user",
-      "schema": "",
+    "ghost-drop_files": {
+      "name": "ghost-drop_files",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
+        },
+        "filename": {
+          "name": "filename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "file_path": {
+          "name": "file_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "file_size": {
+          "name": "file_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "uploaded_at": {
+          "name": "uploaded_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'2025-02-06T05:35:12.549Z'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ghost-drop_session": {
+      "name": "ghost-drop_session",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ghost-drop_session_userId_ghost-drop_user_id_fk": {
+          "name": "ghost-drop_session_userId_ghost-drop_user_id_fk",
+          "tableFrom": "ghost-drop_session",
+          "tableTo": "ghost-drop_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ghost-drop_user": {
+      "name": "ghost-drop_user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "email": {
           "name": "email",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
-        "email_verified": {
-          "name": "email_verified",
-          "type": "timestamp with time zone",
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "CURRENT_TIMESTAMP"
+          "autoincrement": false
         },
         "image": {
           "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "password": {
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "role": {
           "name": "role",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false,
           "default": "'user'"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "self-auth_user_email_unique": {
-          "name": "self-auth_user_email_unique",
-          "nullsNotDistinct": false,
+      "indexes": {
+        "ghost-drop_user_email_unique": {
+          "name": "ghost-drop_user_email_unique",
           "columns": [
             "email"
-          ]
+          ],
+          "isUnique": true
         }
-      }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
-    "public.self-auth_verification_token": {
-      "name": "self-auth_verification_token",
-      "schema": "",
+    "ghost-drop_verificationToken": {
+      "name": "ghost-drop_verificationToken",
       "columns": {
         "identifier": {
           "name": "identifier",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "token": {
           "name": "token",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "expires": {
           "name": "expires",
-          "type": "timestamp with time zone",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "self-auth_verification_token_identifier_token_pk": {
-          "name": "self-auth_verification_token_identifier_token_pk",
+        "ghost-drop_verificationToken_identifier_token_pk": {
           "columns": [
             "identifier",
             "token"
-          ]
+          ],
+          "name": "ghost-drop_verificationToken_identifier_token_pk"
         }
       },
       "uniqueConstraints": {}
     }
   },
   "enums": {},
-  "schemas": {},
-  "sequences": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

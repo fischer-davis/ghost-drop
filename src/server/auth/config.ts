@@ -1,6 +1,6 @@
 import type { Adapter } from "next-auth/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { count, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import NextAuth, {
   type DefaultSession,
   getServerSession,
@@ -9,15 +9,9 @@ import NextAuth, {
 import CredentialsProvider from "next-auth/providers/credentials";
 import { type Provider } from "next-auth/providers/index";
 import requestIp from "request-ip";
-import { logAuthenticationError, validatePassword } from "@/server/api/auth";
-import { db } from "@/server/db";
-
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-} from "@/server/db/schema";
+import {accounts, sessions, users, verificationTokens} from "@/server/db/schema";
+import {db} from "@/server/db";
+import {logAuthenticationError, validatePassword} from "@/server/api/auth";
 
 type UserRole = "admin" | "user";
 
@@ -52,8 +46,10 @@ declare module "next-auth" {
  * that should be fine.
  */
 async function isFirstUser(): Promise<boolean> {
-  const res = await db.select({ count: count() }).from(users);
-  return res[0]?.count == 0;
+  const [{ count: userCount } = { count: 0 }] = await db
+    .select({ count: count() })
+    .from(users);
+  return userCount == 0;
 }
 
 /**
@@ -69,6 +65,7 @@ async function isAdmin(email: string): Promise<boolean> {
 
 const providers: Provider[] = [
   CredentialsProvider({
+    // The name to display on the sign in form (e.g. "Sign in with...")
     name: "Credentials",
     credentials: {
       email: { label: "Email", type: "email", placeholder: "Email" },
@@ -113,7 +110,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin",
     signOut: "/signin",
     error: "/signin",
-    newUser: "/signup",
+    newUser: "/signin",
   },
   callbacks: {
     async signIn({ credentials, profile }) {
@@ -122,6 +119,15 @@ export const authOptions: NextAuthOptions = {
       }
       if (!profile?.email) {
         throw new Error("No profile");
+      }
+      const [{ count: userCount } = { count: 0 }] = await db
+        .select({ count: count() })
+        .from(users)
+        .where(and(eq(users.email, profile.email)));
+
+      // If it's a new user and signups are disabled, fail the sign in
+      if (userCount === 0) {
+        throw new Error("Signups are disabled in server config");
       }
       return true;
     },

@@ -1,21 +1,14 @@
-import { sql } from "drizzle-orm";
 import {
-  index,
   integer,
-  pgTableCreator,
+  sqliteTableCreator,
   primaryKey,
   text,
-  timestamp,
   unique,
-  varchar,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/sqlite-core";
 import { type AdapterAccount } from "next-auth/adapters";
+import {createId} from "@paralleldrive/cuid2";
 
-export const createTable = pgTableCreator((name) => `ghost-drop_${name}`);
-
-// ** Since using credentials manager you can't store session information in db so those tables will be empty. **
-// https://github.com/nextauthjs/next-auth/discussions/3196
-// https://next-auth.js.org/configuration/providers/credentials
+export const createTable = sqliteTableCreator((name) => `ghost-drop_${name}`);
 
 export const files = createTable(
   "files", {
@@ -30,17 +23,20 @@ export const files = createTable(
   }
 );
 
+function createdAtField() {
+  return integer("createdAt", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date());
+}
+
 export const users = createTable("user", {
   id: text("id")
     .notNull()
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => createId()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: timestamp("email_verified", {
-    mode: "date",
-    withTimezone: true,
-  }).default(sql`CURRENT_TIMESTAMP`),
+  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
   password: text("password"),
   role: text("role", { enum: ["admin", "user"] }).default("user"),
@@ -67,32 +63,26 @@ export const accounts = createTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-    userIdIdx: index("account_user_id_idx").on(account.userId),
   }),
 );
 
 export const sessions = createTable("session", {
-  sessionToken: varchar("session_token", { length: 255 })
+  sessionToken: text("sessionToken")
     .notNull()
-    .primaryKey(),
+    .primaryKey()
+    .$defaultFn(() => createId()),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", {
-    mode: "date",
-    withTimezone: true,
-  }).notNull(),
+  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
 });
 
 export const verificationTokens = createTable(
-  "verification_token",
+  "verificationToken",
   {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", {
-      mode: "date",
-      withTimezone: true,
-    }).notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
@@ -105,16 +95,16 @@ export const apiKeys = createTable(
     id: text("id")
       .notNull()
       .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+      .$defaultFn(() => createId()),
     name: text("name").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true }),
+    createdAt: createdAtField(),
     keyId: text("keyId").notNull().unique(),
     keyHash: text("keyHash").notNull(),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
   },
-  (t) => ({
-    uniqueApiKey: unique().on(t.name, t.userId),
+  (ak) => ({
+    uniqueApiKey: unique().on(ak.name, ak.userId),
   }),
 );
