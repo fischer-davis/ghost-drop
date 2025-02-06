@@ -11,7 +11,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-export const createTable = pgTableCreator((name) => `file-dropper_${name}`);
+export const createTable = pgTableCreator((name) => `ghost-drop_${name}`);
 
 // ** Since using credentials manager you can't store session information in db so those tables will be empty. **
 // https://github.com/nextauthjs/next-auth/discussions/3196

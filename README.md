@@ -1,6 +1,5 @@
-# Self-Auth Template
-
-T3 Self Auth template that uses next-auth, drizzle, and shadcn.
+# Ghost Drop
+Easily move files between devices.
 
 ## Environment Variable
 - DATABASE_URL

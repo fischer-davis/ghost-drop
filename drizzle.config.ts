@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ["self-auth_*"],
+  tablesFilter: ["ghost-drop_*"],
 } satisfies Config;
