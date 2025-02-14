@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { UserDropDown } from "@/components/user-dropdown";
+import FileUploadProgress from "@/components/file-upload-progress";
 
 export function Navbar() {
   return (
@@ -14,6 +15,7 @@ export function Navbar() {
               <h1 className="font-bold">Ghost Drop</h1>
             </Link>
           </div>
+          <FileUploadProgress />
           <div className="flex justify-center">
             <div>
               <UserDropDown />

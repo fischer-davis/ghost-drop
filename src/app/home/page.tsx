@@ -2,7 +2,7 @@ import React from "react";
 import { getServerAuthSession } from "@/server/auth/config";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/navbar";
-import FileUpload from "@/components/file-upload";
+import DataView from "@/components/data-view";
 import FileUploadProgress from "@/components/file-upload-progress";
 
 const HomePage = async () => {
@@ -13,14 +13,12 @@ const HomePage = async () => {
 
   return (
     <>
-      <Navbar/>
-      <div className="max-w-lg mx-auto mt-10">
-        <h1 className="text-xl font-semibold mb-4">Upload a File</h1>
-        <FileUpload/>
-        <FileUploadProgress/>
+      <Navbar />
+      <div className="mx-auto p-6">
+        <DataView />
       </div>
     </>
-  )
+  );
 };
 
 export default HomePage;

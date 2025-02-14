@@ -2,6 +2,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { files } from "@/server/db/schema";
+import { desc } from "drizzle-orm";
 
 export const fileRouter = createTRPCRouter({
   saveFileMetadata: publicProcedure
@@ -10,7 +11,7 @@ export const fileRouter = createTRPCRouter({
         filename: z.string(),
         filePath: z.string(),
         fileSize: z.number(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       const newFile = await db.insert(files).values({
@@ -23,6 +24,6 @@ export const fileRouter = createTRPCRouter({
     }),
 
   getUploadedFiles: publicProcedure.query(async () => {
-    return db.select().from(files);
+    return db.select().from(files).orderBy(desc(files.uploadedAt));
   }),
 });
