@@ -135,7 +135,9 @@ export function DataTable<TData, TValue>({
             onClick={async () => {
               const files: string[] = table
                 .getSelectedRowModel()
-                .rows.map((row) => row.id);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                .rows.map((row) => row.original.id);
               await deleteFiles(files);
             }}
             variant="destructive"
