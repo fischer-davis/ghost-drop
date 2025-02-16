@@ -56,7 +56,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -72,7 +71,7 @@ export function DataTable<TData, TValue>({
     // globalFilterFn: "fuzzy",
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onRowSelectionChange: setRowSelection,
+    // onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -84,7 +83,6 @@ export function DataTable<TData, TValue>({
       fuzzy: fuzzyFilter, //define as a filter function that can be used in column definitions
     },
     state: {
-      rowSelection,
       sorting,
       columnVisibility,
       columnFilters,
@@ -92,6 +90,21 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   });
+
+  const handleDownload = () => {
+    table.getSelectedRowModel().rows.forEach((row) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const fileName = row.original.filePath.split("/").pop();
+      const fileUrl = `/api/download?file=${fileName}`;
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
 
   return (
     <div>
@@ -107,7 +120,7 @@ export function DataTable<TData, TValue>({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button onClick={handleDownload} variant="outline" size="sm">
                   <Icons.download />
                 </Button>
               </TooltipTrigger>

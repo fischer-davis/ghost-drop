@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     // Store metadata in SQLite
     await db.insert(files).values({
       filename: file.name,
-      filePath: `/temp/${uniqueFilename}`,
+      filePath: `/dev/${uniqueFilename}`,
       fileSize: fileBuffer.length,
     });
 
