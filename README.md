@@ -1,7 +1,7 @@
 # Ghost Drop
 Easily move files between devices.
 
-<img width="1238" alt="Screenshot 2025-02-16 at 9 01 01 AM" src="https://github.com/user-attachments/assets/d28de638-e604-4225-a2de-3074685f4208" />
+<img width="1225" alt="Screenshot 2025-02-16 at 9 02 54 AM" src="https://github.com/user-attachments/assets/9d982fb5-2770-4d9c-af1b-f71e756f0d61" />
 
 ## Environment Variable
 - DATABASE_URL
