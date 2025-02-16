@@ -36,6 +36,7 @@ import {
 import FileUploader from "@/components/file-upload";
 import { downloadFile } from "@/lib/utils";
 import { type FileData } from "@/types/FileData";
+import { PageSizeDropdown } from "@/components/page-size-dropdown";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,7 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
-    pageSize: 15, //default page size
+    pageSize: 10, //default page size
   });
 
   const table = useReactTable({
@@ -103,12 +104,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-2 py-4">
         <Input
           placeholder="Filter files..."
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="max-w-sm flex-1"
+        />
+        <PageSizeDropdown
+          pageSize={pagination.pageSize}
+          onPageSizeChange={(e) => setPagination({ pageSize: e, pageIndex: 0 })}
+          options={[15, 30, 50, 100]}
         />
         <div className="flex flex-1 justify-end gap-2">
           <FileUploader />
