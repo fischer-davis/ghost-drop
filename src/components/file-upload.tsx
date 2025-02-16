@@ -72,6 +72,7 @@ export default function FileUploader() {
     <>
       <input
         type="file"
+        multiple
         ref={fileInputRef}
         onChange={handleUpload}
         className="hidden"
