@@ -40,7 +40,7 @@ import { PageSizeDropdown } from "@/components/page-size-dropdown";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  deleteFiles: (files: string[]) => void;
+  deleteFiles: (files: string[]) => Promise<void>;
 }
 
 const fuzzyFilter: FilterFn<never> = (row, columnId, value, addMeta) => {
@@ -132,11 +132,11 @@ export function DataTable<TData, TValue>({
             </Tooltip>
           </TooltipProvider>
           <Button
-            onClick={() => {
+            onClick={async () => {
               const files: string[] = table
                 .getSelectedRowModel()
                 .rows.map((row) => row.id);
-              deleteFiles(files);
+              await deleteFiles(files);
             }}
             variant="destructive"
             size="sm"

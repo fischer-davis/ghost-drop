@@ -17,9 +17,11 @@ import { downloadFile } from "@/lib/utils";
 const DataView = () => {
   const { data = [] } = api.file.getUploadedFiles.useQuery();
   const deleteFilesMutation = api.file.deleteFiles.useMutation();
+  const utils = api.useUtils();
 
-  const deleteFiles = (files: string[]) => {
+  const deleteFiles = async (files: string[]) => {
     deleteFilesMutation.mutate(files);
+    await utils.file.invalidate();
   };
 
   const columns = [
@@ -97,9 +99,9 @@ const DataView = () => {
               </Tooltip>
             </TooltipProvider>
             <Button
-              onClick={() => {
+              onClick={async () => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                deleteFiles([row.original.id]);
+                await deleteFiles([row.original.id]);
               }}
               variant="destructive"
             >
