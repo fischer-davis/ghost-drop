@@ -20,7 +20,7 @@ const DataView = () => {
   const utils = api.useUtils();
 
   const deleteFiles = async (files: string[]) => {
-    deleteFilesMutation.mutate(files);
+    await deleteFilesMutation.mutateAsync(files);
     await utils.file.invalidate();
   };
 
