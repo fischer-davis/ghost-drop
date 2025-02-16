@@ -35,12 +35,12 @@ import {
 } from "@/components/ui/tooltip";
 import FileUploader from "@/components/file-upload";
 import { downloadFile } from "@/lib/utils";
-import { type FileData } from "@/types/FileData";
 import { PageSizeDropdown } from "@/components/page-size-dropdown";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  deleteFiles: (files: string[]) => void;
 }
 
 const fuzzyFilter: FilterFn<never> = (row, columnId, value, addMeta) => {
@@ -58,6 +58,7 @@ const fuzzyFilter: FilterFn<never> = (row, columnId, value, addMeta) => {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  deleteFiles,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -130,7 +131,16 @@ export function DataTable<TData, TValue>({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Button variant="destructive" size="sm">
+          <Button
+            onClick={() => {
+              const files: string[] = table
+                .getSelectedRowModel()
+                .rows.map((row) => row.id);
+              deleteFiles(files);
+            }}
+            variant="destructive"
+            size="sm"
+          >
             <Icons.trash />
           </Button>
         </div>
