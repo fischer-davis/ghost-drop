@@ -6,9 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function downloadFile(filePath: string) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const fileName = row.original.filePath.split("/").pop();
+  const fileName = filePath.split("/").pop() ?? "";
   const fileUrl = `/api/download?file=${fileName}`;
   const link = document.createElement("a");
   link.href = fileUrl;
