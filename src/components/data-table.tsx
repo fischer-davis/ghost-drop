@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
-    pageSize: 10, //default page size
+    pageSize: 15, //default page size
   });
 
   const table = useReactTable({
