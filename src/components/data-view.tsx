@@ -4,6 +4,15 @@ import { api } from "@/trpc/trpc";
 import { DataTable } from "@/components/data-table";
 import { formatFileSize } from "@/utils/formatFileSize";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { downloadFile } from "@/lib/utils";
 
 const DataView = () => {
   const { data = [] } = api.file.getUploadedFiles.useQuery();
@@ -45,8 +54,9 @@ const DataView = () => {
     {
       accessorKey: "uploadedAt",
       header: "Uploaded At",
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      // cell: ({ row }) => formatDate(row.original.uploadedAt),
+      cell: ({ row }) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        new Date(row.original.uploadedAt || "").toLocaleString(),
       enableSorting: true,
     },
     {
@@ -55,6 +65,38 @@ const DataView = () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       cell: ({ row }) => formatFileSize(row.original.fileSize),
       enableSorting: true,
+    },
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                      downloadFile(row.original.filePath);
+                    }}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Icons.download />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Download</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <Button variant="destructive">
+              <Icons.trash />
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 

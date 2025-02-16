@@ -3,7 +3,6 @@ import { getServerAuthSession } from "@/server/auth/config";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import DataView from "@/components/data-view";
-import FileUploadProgress from "@/components/file-upload-progress";
 
 const HomePage = async () => {
   const session = await getServerAuthSession();

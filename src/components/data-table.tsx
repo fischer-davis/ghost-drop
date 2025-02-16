@@ -34,6 +34,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import FileUploader from "@/components/file-upload";
+import { downloadFile } from "@/lib/utils";
+import { type FileData } from "@/types/FileData";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,7 +73,6 @@ export function DataTable<TData, TValue>({
     // globalFilterFn: "fuzzy",
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    // onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -95,14 +96,8 @@ export function DataTable<TData, TValue>({
     table.getSelectedRowModel().rows.forEach((row) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      const fileName = row.original.filePath.split("/").pop();
-      const fileUrl = `/api/download?file=${fileName}`;
-      const link = document.createElement("a");
-      link.href = fileUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      downloadFile(row?.original?.filePath || "");
     });
   };
 
