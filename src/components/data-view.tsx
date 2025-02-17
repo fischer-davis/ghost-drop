@@ -13,6 +13,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { downloadFile } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
 
 const DataView = () => {
   const { data = [] } = api.file.getUploadedFiles.useQuery();
@@ -80,34 +87,67 @@ const DataView = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
+            <div className="hidden space-x-2 sm:flex">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        downloadFile(row.original.filePath);
+                      }}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Icons.download />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Download</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <Button
+                onClick={async () => {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                  await deleteFiles([row.original.id]);
+                }}
+                variant="destructive"
+              >
+                <Icons.trash />
+              </Button>
+            </div>
+
+            <div className="sm:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="h-4 w-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
                     onClick={() => {
                       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                       downloadFile(row.original.filePath);
                     }}
-                    variant="outline"
-                    size="sm"
                   >
                     <Icons.download />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Download</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <Button
-              onClick={async () => {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                await deleteFiles([row.original.id]);
-              }}
-              variant="destructive"
-            >
-              <Icons.trash />
-            </Button>
+                    <span>Download</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                      await deleteFiles([row.original.id]);
+                    }}
+                  >
+                    <Icons.trash />
+                    <span>Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         );
       },
