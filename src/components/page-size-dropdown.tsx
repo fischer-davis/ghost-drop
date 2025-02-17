@@ -23,7 +23,7 @@ export function PageSizeDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="justify-between">
-          {pageSize} files
+          {pageSize}
           <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>

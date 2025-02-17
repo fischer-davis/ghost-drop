@@ -9,6 +9,7 @@ import {
   SunMedium,
   Trash2,
   Upload,
+  User,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -23,4 +24,5 @@ export const Icons = {
   trash: Trash2,
   download: Download,
   upload: Upload,
+  user: User,
 };

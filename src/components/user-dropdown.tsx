@@ -21,9 +21,14 @@ export const UserDropDown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost">
           {session ? (
-            <div className="flex items-center justify-center gap-1">
-              <div>{session.data?.user.name?.split(" ")[0]}</div>
-            </div>
+            <>
+              <div className="hidden items-center justify-center gap-1 sm:flex">
+                <div>{session.data?.user.name?.split(" ")[0]}</div>
+              </div>
+              <div className="sm:hidden">
+                <Icons.user />
+              </div>
+            </>
           ) : (
             "Loading..."
           )}
