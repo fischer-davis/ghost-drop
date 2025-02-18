@@ -13,7 +13,7 @@ const HomePage = async () => {
   return (
     <>
       <Navbar />
-      <div className="mx-auto p-6">
+      <div className="mx-auto p-4">
         <DataView />
       </div>
     </>
