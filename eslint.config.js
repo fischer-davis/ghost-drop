@@ -1,12 +1,16 @@
-/** @type {import("eslint").Linter.Config} */
+// @ts-check
+import { Linter } from "eslint";
+
+/** @type {Linter.Config} */
 const config = {
+  root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,
   },
   plugins: ["@typescript-eslint", "drizzle"],
   extends: [
-    "next/core-web-vitals",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
@@ -54,5 +58,27 @@ const config = {
       },
     ],
   },
+  ignorePatterns: ["node_modules/", "dist/", "build/"],
+  overrides: [
+    {
+      files: ["apps/web/**/*.{ts,tsx}"],
+      extends: ["next/core-web-vitals"],
+    },
+    {
+      files: ["apps/server/**/*.ts"],
+      extends: ["plugin:@typescript-eslint/recommended"],
+      rules: {
+        "no-console": "warn",
+      },
+    },
+    {
+      files: ["apps/cli/**/*.ts"],
+      extends: ["plugin:@typescript-eslint/recommended"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+  ],
 };
-module.exports = config;
+
+export default config;

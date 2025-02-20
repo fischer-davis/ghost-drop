@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@server/*": ["apps/server/src/*"],
+      "@web/*": ["apps/web/src/*"],
+      "@cli/*": ["apps/cli/src/*"],
+      "@db/*": ["packages/db/src/*"],
+      "@utils/*": ["packages/utils/src/*"]
+    }
+  },
+  "include": ["apps", "packages"]
+}

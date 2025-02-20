@@ -1,0 +1,46 @@
+{
+  "name": "ghostdrop",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "bun@latest",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --parallel dev:web dev:server",
+    "dev:web": "bun run --cwd apps/web dev",
+    "dev:server": "bun run --cwd apps/server dev",
+    "dev:cli": "bun run --cwd apps/cli dev",
+    "build": "bun run --parallel build:web build:server",
+    "build:web": "bun run --cwd apps/web build",
+    "build:server": "bun run --cwd apps/server build",
+    "lint": "bun eslint . --ext .ts,.tsx",
+    "fix": "bun eslint . --ext .ts,.tsx --fix",
+    "lint:web": "bun run --cwd apps/web lint",
+    "lint:server": "bun run --cwd apps/server lint",
+    "format": "bun run prettier --write .",
+    "test": "bun run vitest",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@trpc/client": "^10.0.0",
+    "superjson": "^1.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
+    "@typescript-eslint/parser": "^8.24.1",
+    "eslint": "^9.20.1",
+    "eslint-config-next": "^15.1.7",
+    "eslint-plugin-drizzle": "^0.2.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": "bun eslint --fix",
+    "**/*.{js,jsx,json,md,css,scss}": "bun prettier --write"
+  }
+}
