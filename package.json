@@ -21,7 +21,7 @@
     "lint:server": "bun run --cwd apps/server lint",
     "format": "bun run prettier --write .",
     "test": "bun run vitest",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@trpc/client": "^10.0.0",
@@ -37,6 +37,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },

@@ -20,3 +20,13 @@ export async function downloadFile(fileId: string) {
 
   await Bun.write(fileId, response.data);
 }
+
+export async function deleteFiles(fileId: string) {
+  const response = await axios.delete(`${API_BASE_URL}/api/delete/${fileId}`);
+  return response.data;
+}
+
+export async function listFiles() {
+  const response = await axios.get(`${API_BASE_URL}/api/list`);
+  return response.data;
+}

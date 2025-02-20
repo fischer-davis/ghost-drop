@@ -13,6 +13,8 @@ const config = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
+    "next/core-web-vitals", // Added Next.js linting rules
+    "plugin:drizzle/recommended", // Added Drizzle linting rules
   ],
   rules: {
     "@typescript-eslint/array-type": "off",
@@ -62,18 +64,18 @@ const config = {
   overrides: [
     {
       files: ["apps/web/**/*.{ts,tsx}"],
-      extends: ["next/core-web-vitals"],
+      extends: ["next/core-web-vitals"], // Next.js rules for web app
     },
     {
       files: ["apps/server/**/*.ts"],
-      extends: ["plugin:@typescript-eslint/recommended"],
+      extends: ["plugin:@typescript-eslint/recommended"], // TypeScript rules for server
       rules: {
         "no-console": "warn",
       },
     },
     {
       files: ["apps/cli/**/*.ts"],
-      extends: ["plugin:@typescript-eslint/recommended"],
+      extends: ["plugin:@typescript-eslint/recommended"], // TypeScript rules for CLI
       rules: {
         "no-console": "off",
       },
