@@ -39,10 +39,10 @@ import { Icons } from "./ui/icons";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  deleteFiles: (files: string[]) => Promise<void>;
+  deleteFilesAction: (files: string[]) => Promise<void>;
 }
 
-const fuzzyFilter: FilterFn<never> = (row, columnId, value, addMeta) => {
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -57,7 +57,7 @@ const fuzzyFilter: FilterFn<never> = (row, columnId, value, addMeta) => {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  deleteFiles,
+  deleteFilesAction,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 .rows.map((row) => row.original.id);
-              await deleteFiles(files);
+              await deleteFilesAction(files);
             }}
             variant="destructive"
             size="sm"

@@ -43,8 +43,8 @@ export async function createUser(
         });
       return result[0];
     } catch (e) {
-      if (e) {
-        if (e.code == "UNIQUE_VIOLATION") {
+      if (e instanceof Error && "code" in e) {
+        if (e.code === "UNIQUE_VIOLATION") {
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "Email is already taken",

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Row, Table } from "@tanstack/react-table";
 import { DataTable } from "@web/components/data-table";
 import { Button } from "@web/components/ui/button";
 import { Checkbox } from "@web/components/ui/checkbox";
@@ -28,7 +29,6 @@ const DataView = () => {
   const utils = api.useUtils();
 
   const deleteFiles = async (files: string[]) => {
-    debugger;
     await deleteFilesMutation.mutateAsync(files);
     await utils.file.invalidate();
   };
@@ -36,7 +36,7 @@ const DataView = () => {
   const columns = [
     {
       id: "select",
-      header: ({ table }) => (
+      header: ({ table }: { table: Table<any> }) => (
         <div className="flex items-center">
           <Checkbox
             checked={
@@ -50,7 +50,7 @@ const DataView = () => {
           />
         </div>
       ),
-      cell: ({ row }) => (
+      cell: ({ row }: { row: Row<any> }) => (
         <div className="flex items-center">
           <Checkbox
             checked={row.getIsSelected()}
@@ -70,7 +70,7 @@ const DataView = () => {
     {
       accessorKey: "uploadedAt",
       header: "Uploaded At",
-      cell: ({ row }) =>
+      cell: ({ row }: { row: Row<any> }) =>
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         new Date(row.original.uploadedAt || "").toLocaleString(),
       enableSorting: true,
@@ -79,13 +79,14 @@ const DataView = () => {
       accessorKey: "fileSize",
       header: "File Size",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      cell: ({ row }) => formatFileSize(row.original.fileSize),
+      cell: ({ row }: { row: Row<any> }) =>
+        formatFileSize(row.original.fileSize),
       enableSorting: true,
     },
     {
       accessorKey: "actions",
       header: "Actions",
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<any> }) => {
         return (
           <div className="flex gap-2">
             <div className="hidden space-x-2 sm:flex">
@@ -155,7 +156,9 @@ const DataView = () => {
     },
   ];
 
-  return <DataTable data={data} columns={columns} deleteFiles={deleteFiles} />;
+  return (
+    <DataTable data={data} columns={columns} deleteFilesAction={deleteFiles} />
+  );
 };
 
 export default DataView;
