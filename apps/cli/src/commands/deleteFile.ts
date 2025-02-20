@@ -3,7 +3,7 @@ import { Command } from "commander";
 import { deleteFiles } from "../utils/api";
 
 export const deleteFile = new Command("delete")
-  .alias("d")
+  .alias("r")
   .argument("<fileId>", "ID of the file to delete")
   .action(async (fileId) => {
     try {
