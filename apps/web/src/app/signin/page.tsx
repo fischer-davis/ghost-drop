@@ -1,6 +1,6 @@
 import React from "react";
-import { LoginForm } from "@/components/login-form";
-import { getServerAuthSession } from "@/server/auth/config";
+import { LoginForm } from "@web/components/login-form";
+import { getServerAuthSession } from "@web/server/auth/config";
 import { redirect } from "next/navigation";
 
 const SignIn = async () => {

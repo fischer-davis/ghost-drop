@@ -14,7 +14,8 @@
       "@cli/*": ["apps/cli/src/*"],
       "@db/*": ["packages/db/src/*"],
       "@utils/*": ["packages/utils/src/*"]
-    }
+    },
+    "jsx": "react"
   },
   "include": ["apps", "packages"]
 }
