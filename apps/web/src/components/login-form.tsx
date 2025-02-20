@@ -1,20 +1,15 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert, AlertDescription } from "@web/components/ui/alert";
+import { Button } from "@web/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from "@web/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,9 +17,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@web/components/ui/form";
+import { Input } from "@web/components/ui/input";
+import { cn } from "@web/lib/utils";
 import { signIn } from "next-auth/react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const signInSchema = z.object({
   email: z.string().email(),

@@ -1,20 +1,23 @@
 "use client";
 
+import { rankItem } from "@tanstack/match-sorter-utils";
 import {
-  type ColumnDef,
-  type ColumnFiltersState,
-  type FilterFn,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type SortingState,
   useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type FilterFn,
+  type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { rankItem } from "@tanstack/match-sorter-utils";
-
+import FileUploader from "@web/components/file-upload";
+import { PageSizeDropdown } from "@web/components/page-size-dropdown";
+import { Button } from "@web/components/ui/button";
+import { Input } from "@web/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,20 +25,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Icons } from "./ui/icons";
+} from "@web/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import FileUploader from "@/components/file-upload";
-import { downloadFile } from "@/lib/utils";
-import { PageSizeDropdown } from "@/components/page-size-dropdown";
+} from "@web/components/ui/tooltip";
+import { downloadFile } from "@web/lib/utils";
+import { useState } from "react";
+import { Icons } from "./ui/icons";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

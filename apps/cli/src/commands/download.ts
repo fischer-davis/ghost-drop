@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import { Command } from "commander";
 import { downloadFile } from "../utils/api";
-import chalk from "chalk";
 
 export const download = new Command("download")
   .alias("d")

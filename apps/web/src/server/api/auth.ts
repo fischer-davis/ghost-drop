@@ -1,8 +1,8 @@
-import { authFailureLogger } from "@/server/logger";
 import { randomBytes } from "crypto";
+import { db } from "@web/server/db";
+import { apiKeys } from "@web/server/db/schema";
+import { authFailureLogger } from "@web/server/logger";
 import * as bcrypt from "bcryptjs";
-import { db } from "@/server/db";
-import { apiKeys } from "@/server/db/schema";
 
 const BCRYPT_SALT_ROUNDS = 10;
 const API_KEY_PREFIX = "ak1";

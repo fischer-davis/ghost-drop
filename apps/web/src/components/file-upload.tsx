@@ -1,14 +1,14 @@
-import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
+import { Button } from "@web/components/ui/button";
+import { Icons } from "@web/components/ui/icons";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useProgress } from "@/stores/useProgress";
-import { api } from "@/trpc/trpc";
+} from "@web/components/ui/tooltip";
+import { useProgress } from "@web/stores/useProgress";
+import { api } from "@web/trpc/trpc";
+import { useRef } from "react";
 
 export default function FileUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,11 +1,10 @@
-import "@/styles/globals.css";
-
+import "@web/styles/globals.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Providers from "@web/lib/Providers";
+import { getServerAuthSession } from "@web/server/auth/config";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { getServerAuthSession } from "@web/server/auth/config";
-import Providers from "@web/lib/Providers";
 import React from "react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const metadata: Metadata = {
   title: "Ghost Drop",

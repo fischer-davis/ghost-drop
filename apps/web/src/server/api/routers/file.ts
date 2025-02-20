@@ -1,10 +1,10 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { z } from "zod";
-import { db } from "@/server/db";
-import { files } from "@/server/db/schema";
-import { desc, inArray } from "drizzle-orm";
 import fs from "fs";
 import path from "path";
+import { createTRPCRouter, publicProcedure } from "@web/server/api/trpc";
+import { db } from "@web/server/db";
+import { files } from "@web/server/db/schema";
+import { desc, inArray } from "drizzle-orm";
+import { z } from "zod";
 
 export const fileRouter = createTRPCRouter({
   saveFileMetadata: publicProcedure

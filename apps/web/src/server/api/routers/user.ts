@@ -1,18 +1,17 @@
 import { TRPCError } from "@trpc/server";
-import { and, count, eq } from "drizzle-orm";
-import { z } from "zod";
-
-import { hashPassword, validatePassword } from "../auth";
 import {
   adminProcedure,
   authedProcedure,
-  type Context,
   publicProcedure,
   router,
-} from "@/server/api/trpc";
-import { zSignUpSchema } from "@/types/users";
+  type Context,
+} from "@web/server/api/trpc";
+import { users } from "@web/server/db/schema";
+import { zSignUpSchema } from "@web/types/users";
+import { and, count, eq } from "drizzle-orm";
 import invariant from "tiny-invariant";
-import { users } from "@/server/db/schema";
+import { z } from "zod";
+import { hashPassword, validatePassword } from "../auth";
 
 export async function createUser(
   input: z.infer<typeof zSignUpSchema>,

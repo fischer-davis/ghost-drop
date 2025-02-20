@@ -7,11 +7,10 @@
  * need to use are documented accordingly near the end.
  */
 
-import {initTRPC, TRPCError} from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
+import { type db } from "@web/server/db";
 import superjson from "superjson";
-import {ZodError} from "zod";
-
-import {type db} from "@/server/db";
+import { ZodError } from "zod";
 
 /**
  * 2. INITIALIZATION

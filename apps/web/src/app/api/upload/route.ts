@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server";
-import path from "path";
 import fs from "fs";
-import { db } from "@/server/db";
-import { files } from "@/server/db/schema";
+import path from "path";
+import { db } from "@web/server/db";
+import { files } from "@web/server/db/schema";
+import { NextResponse, type NextRequest } from "next/server";
 
 // Define storage path for local use (outside src/)
 const uploadDir = path.join(process.cwd(), "dev");

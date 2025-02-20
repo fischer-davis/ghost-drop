@@ -1,27 +1,25 @@
+import { createId } from "@paralleldrive/cuid2";
 import {
   integer,
-  sqliteTableCreator,
   primaryKey,
+  sqliteTableCreator,
   text,
   unique,
 } from "drizzle-orm/sqlite-core";
 import { type AdapterAccount } from "next-auth/adapters";
-import {createId} from "@paralleldrive/cuid2";
 
 export const createTable = sqliteTableCreator((name) => `ghost-drop_${name}`);
 
-export const files = createTable(
-  "files", {
-    id: text("id")
-      .notNull()
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    filename: text("filename").notNull(),
-    filePath: text("file_path").notNull(), // Relative path to file
-    fileSize: integer("file_size").notNull(), // File size in bytes
-    uploadedAt: text("uploaded_at").default(new Date().toISOString()).notNull(),
-  }
-);
+export const files = createTable("files", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  filename: text("filename").notNull(),
+  filePath: text("file_path").notNull(), // Relative path to file
+  fileSize: integer("file_size").notNull(), // File size in bytes
+  uploadedAt: text("uploaded_at").default(new Date().toISOString()).notNull(),
+});
 
 function createdAtField() {
   return integer("createdAt", { mode: "timestamp" })

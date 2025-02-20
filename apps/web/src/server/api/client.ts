@@ -1,10 +1,10 @@
+import { authenticateApiKey } from "@web/server/api/auth";
+import { appRouter } from "@web/server/api/root";
+import { createCallerFactory, type Context } from "@web/server/api/trpc";
+import { getServerAuthSession } from "@web/server/auth/config";
+import { db } from "@web/server/db";
 import { headers } from "next/headers";
 import requestIp from "request-ip";
-import { db } from "@/server/db";
-import { authenticateApiKey } from "@/server/api/auth";
-import { getServerAuthSession } from "@/server/auth/config";
-import { type Context, createCallerFactory } from "@/server/api/trpc";
-import { appRouter } from "@/server/api/root";
 
 export async function createContextFromRequest(req: Request) {
   // TODO: This is a hack until we offer a proper REST API instead of the trpc based one.

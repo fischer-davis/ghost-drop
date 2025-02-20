@@ -1,7 +1,7 @@
-import React from "react";
 import { LoginForm } from "@web/components/login-form";
 import { getServerAuthSession } from "@web/server/auth/config";
 import { redirect } from "next/navigation";
+import React from "react";
 
 const SignIn = async () => {
   const session = await getServerAuthSession();

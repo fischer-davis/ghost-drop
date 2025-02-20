@@ -1,17 +1,22 @@
-import type { Adapter } from "next-auth/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { logAuthenticationError, validatePassword } from "@web/server/api/auth";
+import { db } from "@web/server/db";
+import {
+  accounts,
+  sessions,
+  users,
+  verificationTokens,
+} from "@web/server/db/schema";
 import { and, count, eq } from "drizzle-orm";
 import NextAuth, {
-  type DefaultSession,
   getServerSession,
+  type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
+import type { Adapter } from "next-auth/adapters";
+import { type Provider } from "next-auth/providers";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { type Provider } from "next-auth/providers/index";
 import requestIp from "request-ip";
-import {accounts, sessions, users, verificationTokens} from "@/server/db/schema";
-import {db} from "@/server/db";
-import {logAuthenticationError, validatePassword} from "@/server/api/auth";
 
 type UserRole = "admin" | "user";
 

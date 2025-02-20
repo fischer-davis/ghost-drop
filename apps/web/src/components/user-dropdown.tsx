@@ -1,5 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
+import { Button } from "@web/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,11 +8,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@web/components/ui/dropdown-menu";
+import { Icons } from "@web/components/ui/icons";
 import { signOut, useSession } from "next-auth/react";
-import { Icons } from "@/components/ui/icons";
-import * as React from "react";
 import { useTheme } from "next-themes";
+import * as React from "react";
 
 export const UserDropDown = () => {
   const session = useSession();

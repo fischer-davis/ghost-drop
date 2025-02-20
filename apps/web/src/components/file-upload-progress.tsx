@@ -1,5 +1,5 @@
-import { Progress } from "@/components/ui/progress";
-import { useProgress } from "@/stores/useProgress";
+import { Progress } from "@web/components/ui/progress";
+import { useProgress } from "@web/stores/useProgress";
 
 function formatSpeed(speed: number): string {
   if (speed < 1024) {

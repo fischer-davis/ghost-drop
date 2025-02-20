@@ -1,7 +1,7 @@
-import React from "react";
-import SignUpForm from "@/components/signup-form";
-import { getServerAuthSession } from "@/server/auth/config";
+import SignUpForm from "@web/components/signup-form";
+import { getServerAuthSession } from "@web/server/auth/config";
 import { redirect } from "next/navigation";
+import React from "react";
 
 const SignUp = async () => {
   const session = await getServerAuthSession();

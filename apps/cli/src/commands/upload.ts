@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import { Command } from "commander";
 import { uploadFile } from "../utils/api";
-import chalk from "chalk";
 
 export const upload = new Command("upload")
   .alias("u")

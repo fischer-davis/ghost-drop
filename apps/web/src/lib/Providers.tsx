@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
-import type { Session } from "next-auth";
-import { httpBatchLink, loggerLink } from "@trpc/client";
-import superjson from "superjson";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { api } from "@/trpc/trpc";
+import { httpBatchLink, loggerLink } from "@trpc/client";
+import { TooltipProvider } from "@web/components/ui/tooltip";
+import { api } from "@web/trpc/trpc";
+import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
+import React, { useState } from "react";
+import superjson from "superjson";
 
 function makeQueryClient() {
   return new QueryClient({

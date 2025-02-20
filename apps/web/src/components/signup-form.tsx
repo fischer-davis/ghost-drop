@@ -1,26 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TRPCClientError } from "@trpc/client";
+import { Alert, AlertDescription } from "@web/components/ui/alert";
+import { Button } from "@web/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TRPCClientError } from "@trpc/client";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { zSignUpSchema } from "@/types/users";
-import { type z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/trpc/trpc";
+} from "@web/components/ui/card";
 import {
   Form,
   FormControl,
@@ -28,7 +18,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@web/components/ui/form";
+import { Input } from "@web/components/ui/input";
+import { cn } from "@web/lib/utils";
+import { api } from "@web/trpc/trpc";
+import { zSignUpSchema } from "@web/types/users";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { type z } from "zod";
 
 export default function SignUpForm({
   className,

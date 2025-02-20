@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
-import { UserDropDown } from "@web/components/user-dropdown";
 import FileUploadProgress from "@web/components/file-upload-progress";
+import { UserDropDown } from "@web/components/user-dropdown";
+import Link from "next/link";
+import * as React from "react";
 
 export function Navbar() {
   return (

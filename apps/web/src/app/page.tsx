@@ -1,4 +1,4 @@
-import { getServerAuthSession } from "@/server/auth/config";
+import { getServerAuthSession } from "@web/server/auth/config";
 import { redirect } from "next/navigation";
 
 const Home = async () => {

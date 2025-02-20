@@ -1,5 +1,5 @@
-import React from "react"
-import { LoginForm } from "@web/components/login-form"
+import { LoginForm } from "@web/components/login-form";
+import React from "react";
 
 export default function Page() {
   return (
@@ -8,5 +8,5 @@ export default function Page() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }

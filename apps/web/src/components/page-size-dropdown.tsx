@@ -1,12 +1,11 @@
-import { ChevronDown } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { Button } from "@web/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@web/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 interface PageSizeDropdownProps {
   pageSize: number;

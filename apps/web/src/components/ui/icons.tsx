@@ -2,7 +2,6 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  type Icon as LucideIcon,
   LogOut,
   Moon,
   Settings,
@@ -10,6 +9,7 @@ import {
   Trash2,
   Upload,
   User,
+  type Icon as LucideIcon,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;

@@ -1,25 +1,26 @@
 "use client";
-import React from "react";
-import { api } from "@/trpc/trpc";
-import { DataTable } from "@/components/data-table";
-import { formatFileSize } from "@/utils/formatFileSize";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { downloadFile } from "@/lib/utils";
+
+import { DataTable } from "@web/components/data-table";
+import { Button } from "@web/components/ui/button";
+import { Checkbox } from "@web/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@web/components/ui/dropdown-menu";
+import { Icons } from "@web/components/ui/icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@web/components/ui/tooltip";
+import { downloadFile } from "@web/lib/utils";
+import { api } from "@web/trpc/trpc";
+import { formatFileSize } from "@web/utils/formatFileSize";
 import { MoreHorizontal } from "lucide-react";
+import React from "react";
 
 const DataView = () => {
   const { data = [] } = api.file.getUploadedFiles.useQuery();
