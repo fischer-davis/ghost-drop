@@ -27,6 +27,8 @@ export async function deleteFiles(fileId: string) {
 }
 
 export async function listFiles() {
-  const response = await axios.get(`${API_BASE_URL}/api/list`);
+  const response = await axios.get(
+    `${API_BASE_URL}/trpc/file.getUploadedFiles`,
+  );
   return response.data;
 }

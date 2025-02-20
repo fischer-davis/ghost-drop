@@ -7,6 +7,6 @@ export const upload = new Command("upload")
   .argument("<file>", "File to upload")
   .action(async (file) => {
     console.log(chalk.green(`Uploading file: ${file}`));
-    const result = await uploadFile(file);
-    console.log(chalk.green(`Upload successful: ${result.url}`));
+    await uploadFile(file);
+    console.log(chalk.green(`Upload successful`));
   });

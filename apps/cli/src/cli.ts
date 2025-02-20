@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
 import { Command } from "commander";
-import { deleteFile } from "./commands/deleteFile.ts";
+import { deleteFile } from "./commands/deleteFile";
 import { download } from "./commands/download";
-import { list } from "./commands/list.ts";
+import { list } from "./commands/list";
 import { upload } from "./commands/upload";
 
 const program = new Command();

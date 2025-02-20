@@ -1,6 +1,6 @@
 // Delete command
 import { Command } from "commander";
-import { listFiles } from "../utils/api.ts";
+import { listFiles } from "../utils/api";
 
 export const list = new Command("list")
   .alias("l")

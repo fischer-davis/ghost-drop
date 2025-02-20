@@ -1,6 +1,6 @@
 // Delete command
 import { Command } from "commander";
-import { deleteFiles } from "../utils/api.ts";
+import { deleteFiles } from "../utils/api";
 
 export const deleteFile = new Command("delete")
   .alias("d")
