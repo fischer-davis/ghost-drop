@@ -1,0 +1,24 @@
+{
+  "name": "ghost-drop-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for GhostDrop file uploads and downloads",
+  "bin": {
+    "gd": "./src/cli.ts"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "bun build src/cli.ts --outfile=gd --compile",
+    "link": "bun link"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0"
+  }
+}
