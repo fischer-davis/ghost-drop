@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     await db.insert(files).values({
       filename: file.name,
       filePath: `/dev/${uniqueFilename}`,
-      fileSize: fileBuffer.length,
+      fileSize: file.size,
     });
 
     return NextResponse.json({

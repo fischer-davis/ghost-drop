@@ -36,32 +36,12 @@ export async function uploadFile(filePath: string) {
 }
 
 export async function downloadFile(fileId: string) {
-  const progressBar = createProgressBar();
-  let startTime = Date.now(); // Start time for speed calculation
-  let downloadedBytes = 0;
-
-  const response = await axios.get(`${API_BASE_URL}/download/${fileId}`, {
+  const response = await axios.get(`${API_BASE_URL}/download?file=${fileId}`, {
     responseType: "blob",
-    onDownloadProgress: (progressEvent) => {
-      const total = progressEvent.total || 0;
-      const loaded = progressEvent.loaded || 0;
-      downloadedBytes += loaded - (downloadedBytes || 0); // Update downloaded bytes
-      const progress = Math.round((loaded / total) * 100);
-
-      // Calculate speed
-      const elapsedTime = (Date.now() - startTime) / 1000; // Time in seconds
-      const speed = downloadedBytes / elapsedTime; // Bytes per second
-      const formattedSpeed = formatBytes(speed); // Format speed
-
-      // Update the progress bar with speed
-      progressBar.update(progress, formattedSpeed);
-    },
   });
 
   // Write the downloaded data to a file
   await Bun.write(fileId, response.data);
-
-  progressBar.finish(); // Finish the progress bar when download is complete
 }
 
 export async function deleteFiles(fileId: string) {
