@@ -10,16 +10,16 @@ export const fileRouter = createTRPCRouter({
   saveFileMetadata: publicProcedure
     .input(
       z.object({
-        filename: z.string(),
-        filePath: z.string(),
-        fileSize: z.number(),
+        id: z.string(),
+        originalName: z.string(),
+        size: z.number(),
       }),
     )
     .mutation(async ({ input }) => {
       const newFile = await db.insert(files).values({
-        filename: input.filename,
-        filePath: input.filePath,
-        fileSize: input.fileSize,
+        id: input.id,
+        originalName: input.originalName,
+        size: input.size,
       });
 
       return { success: true, file: newFile };
@@ -27,41 +27,10 @@ export const fileRouter = createTRPCRouter({
   deleteFiles: publicProcedure
     .input(z.array(z.string()))
     .mutation(async ({ input }) => {
-      const fileRecords = await db
-        .select()
-        .from(files)
-        .where(inArray(files.id, input))
-        .all();
-
-      if (fileRecords.length === 0) {
-        return { success: false, error: "Files not found" };
-      }
-
-      const errors: { id: string; error: string }[] = [];
-
-      for (const fileRecord of fileRecords) {
-        const filePath = path.join(process.cwd(), fileRecord.filePath);
-
-        try {
-          fs.unlinkSync(filePath);
-        } catch (error) {
-          console.error("Error deleting file from file system:", error);
-          errors.push({
-            id: fileRecord.id,
-            error: "Error deleting file from file system",
-          });
-        }
-      }
-
-      await db.delete(files).where(inArray(files.id, input));
-
-      if (errors.length > 0) {
-        return { success: false, errors };
-      }
-
+      //TODO: Delete files from db.
       return { success: true };
     }),
   getUploadedFiles: publicProcedure.query(async () => {
-    return db.select().from(files).orderBy(desc(files.uploadedAt));
+    return db.select().from(files).orderBy(desc(files.createdAt));
   }),
 });

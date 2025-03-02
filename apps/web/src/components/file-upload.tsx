@@ -9,58 +9,52 @@ import {
 import { useProgress } from "@web/stores/useProgress";
 import { api } from "@web/trpc/trpc";
 import { useRef } from "react";
+import * as tus from "tus-js-client";
 
 export default function FileUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setProgress, setUploading, setSpeed } = useProgress();
+  const { setProgress } = useProgress();
   const utils = api.useUtils();
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploading(true);
-    Array.from(e.target.files!).forEach((file: File) => {
-      const formData = new FormData();
-      formData.append("file", file);
+    if (!e.target.files) return;
+    const file = e.target.files[0];
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/api/upload");
-
-      let startTime = Date.now();
-      let uploadedBytes = 0;
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent);
-
-          const currentTime = Date.now();
-          const elapsedTime = (currentTime - startTime) / 1000; // in seconds
-          const bytesUploaded = event.loaded - uploadedBytes;
-          const speed = bytesUploaded / elapsedTime / 1024; // in KB/s
-          setSpeed(speed);
-
-          startTime = currentTime;
-          uploadedBytes = event.loaded;
+    // Create a new tus upload
+    const upload = new tus.Upload(file, {
+      endpoint: "http://localhost:3015/files",
+      retryDelays: [0, 3000, 5000, 10000, 20000],
+      metadata: {
+        filename: file.name,
+        filetype: file.type,
+      },
+      onError: function (error) {
+        console.log("Failed because: " + error);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        console.log(bytesUploaded, bytesTotal, percentage + "%");
+        setProgress(Number(percentage));
+      },
+      onSuccess: function () {
+        if ("name" in upload.file) {
+          console.log("Download %s from %s", upload.file.name, upload.url);
         }
-      };
-
-      xhr.onload = async () => {
-        setUploading(false);
-        if (xhr.status === 200) {
-          setProgress(100);
-          await utils.file.invalidate(); // Invalidate the cache for the files query
-        } else {
-          setProgress(0);
-        }
-        setSpeed(0);
-      };
-
-      xhr.onerror = () => {
         setProgress(0);
-        setUploading(false);
-        setSpeed(0);
-      };
+      },
+    });
 
-      xhr.send(formData);
+    // Check if there are any previous uploads to continue.
+    upload.findPreviousUploads().then(function (previousUploads) {
+      // Found previous uploads so we select the first one.
+      if (previousUploads.length) {
+        upload.resumeFromPreviousUpload(previousUploads[0]);
+      }
+
+      console.log("upload");
+
+      // Start the upload
+      upload.start();
     });
   };
 

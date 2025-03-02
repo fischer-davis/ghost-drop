@@ -17,7 +17,7 @@ CREATE TABLE `ghost-drop_account` (
 CREATE TABLE `ghost-drop_apiKey` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`createdAt` integer NOT NULL,
+	`created_at` integer NOT NULL,
 	`keyId` text NOT NULL,
 	`keyHash` text NOT NULL,
 	`userId` text NOT NULL,
@@ -26,10 +26,9 @@ CREATE TABLE `ghost-drop_apiKey` (
 --> statement-breakpoint
 CREATE TABLE `ghost-drop_files` (
 	`id` text PRIMARY KEY NOT NULL,
-	`filename` text NOT NULL,
-	`file_path` text NOT NULL,
-	`file_size` integer NOT NULL,
-	`uploaded_at` text DEFAULT '2025-02-06T05:35:12.549Z' NOT NULL
+	`original_name` text NOT NULL,
+	`size` integer NOT NULL,
+	`created_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `ghost-drop_session` (
