@@ -11,14 +11,15 @@ export const fileRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        originalName: z.string(),
+        name: z.string(),
         size: z.number(),
       }),
     )
     .mutation(async ({ input }) => {
+      console.log("Received input:", input);
       const newFile = await db.insert(files).values({
         id: input.id,
-        originalName: input.originalName,
+        name: input.name,
         size: input.size,
       });
 

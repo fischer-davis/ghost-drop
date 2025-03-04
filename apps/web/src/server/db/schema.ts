@@ -18,7 +18,7 @@ function createdAtField() {
 
 export const files = createTable("files", {
   id: text("id").primaryKey(), // Tus file ID
-  originalName: text("original_name").notNull(),
+  name: text("name").notNull(),
   size: integer("size").notNull(),
   createdAt: createdAtField(),
 });

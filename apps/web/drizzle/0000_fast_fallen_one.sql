@@ -26,7 +26,7 @@ CREATE TABLE `ghost-drop_apiKey` (
 --> statement-breakpoint
 CREATE TABLE `ghost-drop_files` (
 	`id` text PRIMARY KEY NOT NULL,
-	`original_name` text NOT NULL,
+	`name` text NOT NULL,
 	`size` integer NOT NULL,
 	`created_at` integer NOT NULL
 );
