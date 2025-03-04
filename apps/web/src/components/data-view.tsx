@@ -98,7 +98,6 @@ const DataView = () => {
                         downloadFile(row.original.filePath);
                       }}
                       variant="outline"
-                      size="sm"
                     >
                       <Icons.download />
                     </Button>
