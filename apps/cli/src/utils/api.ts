@@ -30,6 +30,7 @@ export async function uploadFile(filePath: string) {
       progressBar.update(Number(percentage), "uploading");
     },
     onSuccess: function () {
+      progressBar.update(100, "Complete");
       progressBar.finish();
     },
   });

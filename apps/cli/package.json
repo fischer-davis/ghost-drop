@@ -14,8 +14,10 @@
     "@types/bun": "latest"
   },
   "dependencies": {
+    "@types/cli-progress": "^3.11.6",
     "axios": "^1.7.9",
     "chalk": "^5.4.1",
+    "cli-progress": "^3.12.0",
     "commander": "^13.1.0"
   }
 }
