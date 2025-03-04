@@ -13,7 +13,7 @@ import * as tus from "tus-js-client";
 
 export default function FileUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setProgress } = useProgress();
+  const { setProgress, setUploading } = useProgress();
   const utils = api.useUtils();
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,15 +31,16 @@ export default function FileUploader() {
       onError: function (error) {
         console.log("Failed because: " + error);
       },
+      onBeforeRequest: function (req) {
+        setUploading(true);
+      },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
         console.log(bytesUploaded, bytesTotal, percentage + "%");
         setProgress(Number(percentage));
       },
       onSuccess: function () {
-        if ("name" in upload.file) {
-          console.log("Download %s from %s", upload.file.name, upload.url);
-        }
+        setUploading(false);
         setProgress(0);
         utils.file.invalidate();
       },

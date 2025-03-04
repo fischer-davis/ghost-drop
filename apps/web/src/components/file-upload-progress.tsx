@@ -13,13 +13,14 @@ function formatSpeed(speed: number): string {
 
 export default function FileUploadProgress() {
   const { progress, uploading, speed } = useProgress();
+  console.log(progress);
   return (
     <>
       {uploading ? (
         <div className="flex w-80 items-center gap-2">
-          <Progress value={progress} className="flex-1 bg-gray-200" />
+          <Progress value={progress} className="flex-1" />
           <p className="text-sm">{progress}%</p>
-          <p className="text-sm">{formatSpeed(speed)}</p>
+          {/*<p className="text-sm">{formatSpeed(speed)}</p>*/}
         </div>
       ) : null}
     </>
