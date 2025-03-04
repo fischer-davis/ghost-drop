@@ -1,93 +1,66 @@
-import { formatBytes } from "@cli/utils/formatBytes"; // Assuming you have a progress bar function
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { AppRouter } from "@web/server/api/root";
 import axios from "axios";
+import superjson from "superjson";
+import * as tus from "tus-js-client";
 import { createProgressBar } from "./progressBar";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000/api";
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3015/files/";
 const CHUNK_SIZE = 100 * 1024 * 1024; // 100 MB
 
+// Setup tRPC client
+const trpc = createTRPCClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: "http://localhost:3000/api/trpc",
+      transformer: superjson,
+      maxURLLength: 14000,
+    }),
+  ],
+});
+
 export async function uploadFile(filePath: string) {
-  const fileStats = await Bun.file(filePath).stat();
-  const fileSize = fileStats.size;
-  const fileName = filePath.split("/").pop() || "unknown";
+  const file = Bun.file(filePath);
 
-  if (fileSize > CHUNK_SIZE) {
-    // Chunk-based upload
-    const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
-    const progressBar = createProgressBar();
-    let startTime = Date.now();
-    let uploadedBytes = 0;
+  const progressBar = createProgressBar();
 
-    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
-      const start = chunkIndex * CHUNK_SIZE;
-      const end = Math.min(start + CHUNK_SIZE, fileSize);
-      const chunk = await Bun.file(filePath).slice(start, end).arrayBuffer();
-
-      const formData = new FormData();
-      formData.append("file", new Blob([chunk]), fileName);
-      formData.append("chunkIndex", chunkIndex.toString());
-      formData.append("totalChunks", totalChunks.toString());
-      formData.append("originalFilename", fileName);
-
-      try {
-        await axios.post(`${API_BASE_URL}/upload`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent) => {
-            const total = progressEvent.total || 0;
-            const loaded = progressEvent.loaded || 0;
-            uploadedBytes += loaded - (uploadedBytes || 0);
-            const progress = Math.round(((chunkIndex + 1) / totalChunks) * 100);
-
-            const elapsedTime = (Date.now() - startTime) / 1000;
-            const speed = uploadedBytes / elapsedTime;
-            const formattedSpeed = formatBytes(speed);
-
-            progressBar.update(progress, formattedSpeed);
-          },
-        });
-      } catch (error) {
-        console.error("Error uploading chunk:", error);
-        throw error;
-      }
-    }
-
-    progressBar.finish();
-  } else {
-    // Regular upload
-    const formData = new FormData();
-    formData.append("file", Bun.file(filePath), fileName);
-
-    const progressBar = createProgressBar();
-    let startTime = Date.now();
-    let uploadedBytes = 0;
-
-    try {
-      const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (progressEvent) => {
-          const total = progressEvent.total || 0;
-          const loaded = progressEvent.loaded || 0;
-          uploadedBytes += loaded - (uploadedBytes || 0);
-          const progress = Math.round((loaded / total) * 100);
-
-          const elapsedTime = (Date.now() - startTime) / 1000;
-          const speed = uploadedBytes / elapsedTime;
-          const formattedSpeed = formatBytes(speed);
-
-          progressBar.update(progress, formattedSpeed);
-        },
-      });
-
+  const upload = new tus.Upload(file, {
+    endpoint: API_BASE_URL,
+    retryDelays: [0, 3000, 5000, 10000, 20000],
+    chunkSize: CHUNK_SIZE,
+    metadata: {
+      filename: file.name ?? "unknown",
+      filetype: file.type,
+    },
+    onError: function (error) {
+      console.log("Failed because: " + error);
+    },
+    onBeforeRequest: function (req) {
+      progressBar.start();
+    },
+    onProgress: function (bytesUploaded, bytesTotal) {
+      const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+      progressBar.update(Number(percentage), "uploading");
+    },
+    onSuccess: function () {
       progressBar.finish();
-      return response.data;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      throw error;
+    },
+  });
+
+  // Check if there are any previous uploads to continue.
+  upload.findPreviousUploads().then(function (previousUploads) {
+    // Found previous uploads so we select the first one.
+    if (previousUploads.length) {
+      upload.resumeFromPreviousUpload(previousUploads[0]);
     }
-  }
+
+    // Start the upload
+    upload.start();
+  });
 }
 
 export async function downloadFile(fileId: string) {
-  const response = await axios.get(`${API_BASE_URL}/download?file=${fileId}`, {
+  const response = await axios.get(`${API_BASE_URL}/${fileId}`, {
     responseType: "blob",
   });
 
@@ -96,13 +69,10 @@ export async function downloadFile(fileId: string) {
 }
 
 export async function deleteFiles(fileId: string) {
-  const response = await axios.delete(`${API_BASE_URL}/api/delete/${fileId}`);
+  const response = await axios.delete(`${API_BASE_URL}/${fileId}`);
   return response.data;
 }
 
 export async function listFiles() {
-  const response = await axios.get(
-    `${API_BASE_URL}/trpc/file.getUploadedFiles`,
-  );
-  return response.data;
+  return await trpc.file.getUploadedFiles.query();
 }
