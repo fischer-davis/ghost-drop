@@ -21,7 +21,7 @@
     "lint:server": "bun run --cwd apps/server lint",
     "format": "bun run prettier --write .",
     "test": "bun run vitest",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@trpc/client": "^11.0.0-rc.446",

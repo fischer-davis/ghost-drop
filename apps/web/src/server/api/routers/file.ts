@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { createTRPCRouter, publicProcedure } from "@web/server/api/trpc";
 import { db } from "@web/server/db";
 import { files } from "@web/server/db/schema";
