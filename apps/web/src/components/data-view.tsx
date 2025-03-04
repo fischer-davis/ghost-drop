@@ -95,7 +95,7 @@ const DataView = () => {
                     <Button
                       onClick={() => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                        downloadFile(row.original.filePath);
+                        downloadFile(row.original.id);
                       }}
                       variant="outline"
                     >

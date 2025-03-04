@@ -41,6 +41,7 @@ export default function FileUploader() {
           console.log("Download %s from %s", upload.file.name, upload.url);
         }
         setProgress(0);
+        utils.file.invalidate();
       },
     });
 
