@@ -1,13 +1,18 @@
+import readline from "readline";
+import chalk from "chalk";
+
 export function createProgressBar() {
   return {
-    start: () => {
-      console.log("Progress started");
+    before: (file: string) => {
+      console.log(chalk.green(`Uploading file: ${file}`));
     },
-    update: (progress: number, status: string) => {
-      console.log(`Progress: ${progress}% - ${status}`);
+    update: (progress: number) => {
+      readline.cursorTo(process.stdout, 0);
+      process.stdout.write(`Progress: ${progress}%`);
+      readline.clearLine(process.stdout, 1);
     },
     finish: () => {
-      console.log("Progress finished");
+      console.log(chalk.green(`\nUpload successful`));
     },
   };
 }
