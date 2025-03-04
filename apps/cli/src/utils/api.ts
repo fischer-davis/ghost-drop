@@ -48,12 +48,24 @@ export async function uploadFile(filePath: string) {
 }
 
 export async function downloadFile(fileId: string) {
-  const response = await axios.get(`${API_BASE_URL}/download?file=${fileId}`, {
+  const progressBar = createProgressBar();
+  progressBar.before(fileId);
+
+  const response = await axios.get(`${API_BASE_URL}${fileId}`, {
     responseType: "blob",
+    onDownloadProgress: (progressEvent) => {
+      const total = progressEvent.total ?? 0;
+      const current = progressEvent.loaded;
+      const percentage = ((current / total) * 100).toFixed(2);
+      progressBar.update(Number(percentage), "downloading");
+    },
   });
 
   // Write the downloaded data to a file
   await Bun.write(fileId, response.data);
+
+  progressBar.update(100, "Complete");
+  progressBar.finish();
 }
 
 export async function deleteFiles(fileId: string) {
