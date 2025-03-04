@@ -10,22 +10,18 @@ import { type AdapterAccount } from "next-auth/adapters";
 
 export const createTable = sqliteTableCreator((name) => `ghost-drop_${name}`);
 
-export const files = createTable("files", {
-  id: text("id")
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  filename: text("filename").notNull(),
-  filePath: text("file_path").notNull(), // Relative path to file
-  fileSize: integer("file_size").notNull(), // File size in bytes
-  uploadedAt: text("uploaded_at").default(new Date().toISOString()).notNull(),
-});
-
 function createdAtField() {
-  return integer("createdAt", { mode: "timestamp" })
+  return integer("created_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date());
 }
+
+export const files = createTable("files", {
+  id: text("id").primaryKey(), // Tus file ID
+  name: text("name").notNull(),
+  size: integer("size").notNull(),
+  createdAt: createdAtField(),
+});
 
 export const users = createTable("user", {
   id: text("id")

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "19c9cc83-66aa-40d7-aa1a-9ea322701e61",
+  "id": "dda43b7e-390c-440f-a34c-be7c62fa2db7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "ghost-drop_account": {
@@ -129,8 +129,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "createdAt": {
-          "name": "createdAt",
+        "created_at": {
+          "name": "created_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -203,34 +203,26 @@
           "notNull": true,
           "autoincrement": false
         },
-        "filename": {
-          "name": "filename",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "file_path": {
-          "name": "file_path",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "file_size": {
-          "name": "file_size",
+        "size": {
+          "name": "size",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "uploaded_at": {
-          "name": "uploaded_at",
-          "type": "text",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'2025-02-06T05:35:12.549Z'"
+          "autoincrement": false
         }
       },
       "indexes": {},

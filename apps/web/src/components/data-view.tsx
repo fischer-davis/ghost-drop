@@ -63,24 +63,23 @@ const DataView = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "filename",
-      header: "Filename",
+      accessorKey: "name",
+      header: "File Name",
       enableSorting: true,
     },
     {
-      accessorKey: "uploadedAt",
+      accessorKey: "createdAt",
       header: "Uploaded At",
       cell: ({ row }: { row: Row<any> }) =>
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        new Date(row.original.uploadedAt || "").toLocaleString(),
+        new Date(row.original.createdAt || "").toLocaleString(),
       enableSorting: true,
     },
     {
-      accessorKey: "fileSize",
+      accessorKey: "size",
       header: "File Size",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      cell: ({ row }: { row: Row<any> }) =>
-        formatFileSize(row.original.fileSize),
+      cell: ({ row }: { row: Row<any> }) => formatFileSize(row.original.size),
       enableSorting: true,
     },
     {
