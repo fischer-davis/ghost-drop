@@ -1,7 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@web/server/api/trpc";
 import { db } from "@web/server/db";
 import { files } from "@web/server/db/schema";
-import { desc, inArray } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { z } from "zod";
 
 export const fileRouter = createTRPCRouter({

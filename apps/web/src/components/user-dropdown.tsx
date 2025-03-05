@@ -10,13 +10,15 @@ import {
   DropdownMenuTrigger,
 } from "@web/components/ui/dropdown-menu";
 import { Icons } from "@web/components/ui/icons";
-import { signOut, useSession } from "next-auth/react";
+import { authClient } from "@web/lib/auth-client";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 export const UserDropDown = () => {
-  const session = useSession();
+  const { data: session } = authClient.useSession();
   const { setTheme, theme } = useTheme();
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +26,7 @@ export const UserDropDown = () => {
           {session ? (
             <>
               <div className="hidden items-center justify-center gap-1 sm:flex">
-                <div>{session.data?.user.name?.split(" ")[0]}</div>
+                <div>{session.user.name?.split(" ")[0]}</div>
               </div>
               <div className="sm:hidden">
                 <Icons.user />
@@ -52,7 +54,13 @@ export const UserDropDown = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
-            await signOut({ callbackUrl: "/" });
+            await authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/signin"); // redirect to login page
+                },
+              },
+            });
           }}
         >
           <Icons.logout />

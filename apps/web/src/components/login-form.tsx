@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@web/components/ui/card";
+import { Checkbox } from "@web/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -19,8 +20,8 @@ import {
   FormMessage,
 } from "@web/components/ui/form";
 import { Input } from "@web/components/ui/input";
+import { authClient } from "@web/lib/auth-client";
 import { cn } from "@web/lib/utils";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -30,6 +31,7 @@ import { z } from "zod";
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string(),
+  rememberMe: z.string().optional(),
 });
 
 const SIGNIN_FAILED = "Incorrect email or password";
@@ -53,16 +55,34 @@ export function LoginForm({
   });
 
   const onSubmit = form.handleSubmit(async (value) => {
-    const resp = await signIn("credentials", {
-      redirect: false,
-      email: value.email.trim(),
-      password: value.password,
-    });
-    if (!resp || !resp?.ok) {
-      setError(SIGNIN_FAILED);
-      return;
-    }
-    router.replace("/home");
+    console.log("clicked");
+    return await authClient.signIn.email(
+      {
+        ...value,
+        callbackURL: "/home",
+        /**
+         * remember the user session after the browser is closed.
+         * @default true
+         */
+        rememberMe: value.rememberMe === "true",
+      },
+      {
+        onRequest: () => {
+          setError("");
+        },
+        onSuccess: () => {
+          // Redirect to home screen after login.
+          router.push("/home");
+        },
+        onError: (error) => {
+          if (error instanceof Error) {
+            setError(SIGNIN_FAILED);
+          } else {
+            setError(error.error.message);
+          }
+        },
+      },
+    );
   });
 
   return (
@@ -108,6 +128,22 @@ export function LoginForm({
                           />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="rememberMe"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                        <FormControl>
+                          <Checkbox {...field} />
+                        </FormControl>
+                        <FormLabel className="text-sm font-normal">
+                          Remember Me
+                        </FormLabel>
                       </FormItem>
                     );
                   }}

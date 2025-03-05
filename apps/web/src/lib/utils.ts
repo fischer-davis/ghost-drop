@@ -6,7 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function downloadFile(filePath: string) {
-  debugger;
   const fileName = filePath.split("/").pop() ?? "";
   const fileUrl = `http://localhost:3015/files/${fileName}`;
   const link = document.createElement("a");

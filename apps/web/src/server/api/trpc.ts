@@ -57,12 +57,16 @@ export const createCallerFactory = t.createCallerFactory;
  */
 export const createTRPCRouter = t.router;
 
-interface User {
+type User = {
   id: string;
-  name?: string | null | undefined;
-  email?: string | null | undefined;
-  role: "admin" | "user" | null;
-}
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  image?: string | null;
+  role: string; // Add the role property
+};
 
 export interface Context {
   user: User | null;

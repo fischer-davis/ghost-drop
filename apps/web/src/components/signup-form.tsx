@@ -20,10 +20,9 @@ import {
   FormMessage,
 } from "@web/components/ui/form";
 import { Input } from "@web/components/ui/input";
+import { authClient } from "@web/lib/auth-client";
 import { cn } from "@web/lib/utils";
-import { api } from "@web/trpc/trpc";
 import { zSignUpSchema } from "@web/types/users";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -41,34 +40,31 @@ export default function SignUpForm({
     resolver: zodResolver(zSignUpSchema),
   });
 
-  const createUserMutation = api.user.create.useMutation();
-
   const handleSubmit = form.handleSubmit(async (value) => {
     if (value.password !== value.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    try {
-      await createUserMutation.mutateAsync(value);
-    } catch (e) {
-      if (e instanceof TRPCClientError) {
-        setError(e.message);
-      }
-      return;
-    }
-    const resp = await signIn("credentials", {
-      redirect: false,
-      email: value.email.trim(),
-      password: value.password,
-    });
-    if (!resp || !resp.ok) {
-      setError("Hit an unexpected error while signing in");
-      return;
-    }
-
-    // Redirect to a welcome page or dashboard after successful sign-up
-    router.push("/home");
+    await authClient.signUp.email(
+      {
+        ...value,
+        callbackURL: "/dashboard", // a url to redirect to after the user verifies their email (optional)
+      },
+      {
+        onRequest: (ctx) => {
+          //show loading
+        },
+        onSuccess: (ctx) => {
+          // Redirect to home screen after signup.
+          router.push("/home");
+        },
+        onError: (ctx) => {
+          // display the error message
+          alert(ctx.error.message);
+        },
+      },
+    );
   });
 
   return (

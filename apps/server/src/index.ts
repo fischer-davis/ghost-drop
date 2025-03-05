@@ -1,9 +1,9 @@
 import { createTRPCClient, httpBatchLink, httpLink } from "@trpc/client";
 import { FileStore } from "@tus/file-store";
 import { Server } from "@tus/server";
+import { AppRouter } from "@web/server/api/root";
 import fastify from "fastify";
 import superjson from "superjson";
-import { AppRouter } from "../../web/src/server/api/root";
 
 const app = fastify({ logger: true });
 
@@ -27,7 +27,7 @@ const tusServer = new Server({
       const response = await trpc.file.saveFileMetadata.mutate({
         id: file.id, // assuming you want to store the file ID
         name: file.metadata?.filename || "unknown", // extract filename if available
-        size: file.size,
+        size: file.size || 0,
       });
       console.log(
         `${file.metadata?.filename || "unknown"} metadata saved to database.`,

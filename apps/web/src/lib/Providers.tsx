@@ -4,8 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { TooltipProvider } from "@web/components/ui/tooltip";
 import { api } from "@web/trpc/trpc";
-import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import React, { useState } from "react";
 import superjson from "superjson";
@@ -38,13 +36,7 @@ function getQueryClient() {
   }
 }
 
-const Providers = ({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) => {
+const Providers = ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient();
 
   const [trpcClient] = useState(() =>
@@ -66,20 +58,18 @@ const Providers = ({
   );
 
   return (
-    <SessionProvider session={session}>
-      <api.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </api.Provider>
-    </SessionProvider>
+    <api.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </api.Provider>
   );
 };
 

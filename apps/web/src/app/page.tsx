@@ -1,13 +1,26 @@
-import { getServerAuthSession } from "@web/server/auth/config";
-import { redirect } from "next/navigation";
+"use client";
 
-const Home = async () => {
-  const session = await getServerAuthSession();
-  if (session) {
-    redirect("/home");
-  } else {
-    redirect("/signin");
-  }
+import { authClient } from "@web/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+const Home = () => {
+  const { data: session, isPending } = authClient.useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isPending) {
+      return;
+    }
+
+    if (session) {
+      router.push("/home");
+    } else {
+      router.push("/signin");
+    }
+  }, [session, router, isPending]);
+
+  return null;
 };
 
 export default Home;

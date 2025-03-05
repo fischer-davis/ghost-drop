@@ -1,7 +1,6 @@
 import "@web/styles/globals.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Providers from "@web/lib/Providers";
-import { getServerAuthSession } from "@web/server/auth/config";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import React from "react";
@@ -15,7 +14,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const session = await getServerAuthSession();
   return (
     <html
       lang="en"
@@ -23,7 +21,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <Providers session={session}>
+        <Providers>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
