@@ -12,8 +12,6 @@
       "@server/*": ["apps/server/src/*"],
       "@web/*": ["apps/web/src/*"],
       "@cli/*": ["apps/cli/src/*"],
-      "@db/*": ["packages/db/src/*"],
-      "@utils/*": ["packages/utils/src/*"]
     },
     "jsx": "react"
   },

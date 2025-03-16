@@ -1,5 +1,4 @@
 import axios from "axios";
-import chalk from "chalk";
 import * as tus from "tus-js-client";
 import { createProgressBar } from "./progressBar";
 

@@ -1,22 +1,44 @@
-import { createTRPCClient, httpBatchLink, httpLink } from "@trpc/client";
+import { AppRouter, appRouter } from "@server/trpc/root";
+import { createCallerFactory } from "@server/trpc/trpc";
+import {
+  CreateFastifyContextOptions,
+  fastifyTRPCPlugin,
+  FastifyTRPCPluginOptions,
+} from "@trpc/server/adapters/fastify";
 import { FileStore } from "@tus/file-store";
 import { Server } from "@tus/server";
-import { AppRouter } from "@web/server/api/root";
+import { auth } from "@web/lib/auth";
+import { db } from "apps/server/src/db";
 import fastify from "fastify";
-import superjson from "superjson";
+import FastifyBetterAuth from "fastify-better-auth";
+import fp from "fastify-plugin";
 
 const app = fastify({ logger: true });
 
-// Setup tRPC client
-const trpc = createTRPCClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: "http://localhost:3000/api/trpc",
-      transformer: superjson,
-      maxURLLength: 14000,
-    }),
-  ],
+export function createContext({ req, res }: CreateFastifyContextOptions) {
+  return { req, res, db };
+}
+export type Context = Awaited<ReturnType<typeof createContext>>;
+
+// Register tRPC router with Fastify
+app.register(fastifyTRPCPlugin, {
+  prefix: "/trpc",
+  trpcOptions: {
+    router: appRouter,
+    createContext,
+    onError({ path, error }) {
+      // report to error monitoring
+      console.error(`Error in tRPC handler on path '${path}':`, error);
+    },
+  } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
 });
+
+const caller = createCallerFactory(appRouter)({
+  req: { ip: "server" }, // Provide the actual request object
+  db, // Provide the database instance
+});
+
+await app.register(FastifyBetterAuth, { auth });
 
 // Setup TUS server
 const tusServer = new Server({
@@ -24,9 +46,11 @@ const tusServer = new Server({
   onUploadFinish: async (req, res, file) => {
     try {
       console.log("File uploaded");
-      const response = await trpc.file.saveFileMetadata.mutate({
-        id: file.id, // assuming you want to store the file ID
-        name: file.metadata?.filename || "unknown", // extract filename if available
+
+      // Call the tRPC route
+      await caller.file.saveFileMetadata({
+        id: file.id,
+        name: file.metadata?.filename || "unknown",
         size: file.size || 0,
       });
       console.log(
@@ -56,9 +80,9 @@ app.all("/files/*", (req, res) => {
 });
 
 app
-  .listen({ port: 3015 })
+  .listen({ port: 3010 })
   .then(() => {
-    console.log(`Server listening on port 3015`);
+    console.log(`Server listening on port 3000`);
   })
   .catch((err) => {
     app.log.error(err);
