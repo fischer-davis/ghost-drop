@@ -1,3 +1,4 @@
+import Register from "@/components/register.tsx";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/signup")({
@@ -7,7 +8,9 @@ export const Route = createFileRoute("/signup")({
 function SignUp() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm"></div>
+      <div className="w-full max-w-sm">
+        <Register />
+      </div>
     </div>
   );
 }

@@ -13,7 +13,9 @@ function Index() {
   return (
     <div className="p-2">
       Home
-      <Button>Click</Button>
+      <Button variant="solid" color={"warning"}>
+        Click
+      </Button>
     </div>
   );
 }

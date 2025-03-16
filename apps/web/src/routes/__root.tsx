@@ -11,12 +11,17 @@ export const Route = createRootRoute({
     const { data: session, isPending } = authClient.useSession();
     const router = useRouter();
 
-    // if (!isPending && !session) {
-    //   router.navigate({ to: "/signin" });
-    // }
+    if (isPending) return;
+
+    if (!session) {
+      router.navigate({ to: "/signin" });
+    } else {
+      router.navigate({ to: "/" });
+    }
+
     return (
       <>
-        <Navbar />
+        {session ? <Navbar /> : null}
         <Outlet />
         <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
       </>
