@@ -8,7 +8,7 @@ import { createRootRoute, Outlet, useRouter } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
   component: () => {
-    const { data: session, isPending } = authClient.useSession();
+    const { isPending } = authClient.useSession();
     const router = useRouter();
 
     if (isPending) return;

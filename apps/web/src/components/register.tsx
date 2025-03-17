@@ -1,24 +1,52 @@
+import { authClient } from "@/lib/auth-client.ts";
+import { zSignUpSchema } from "@/utils/utils.ts";
 import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
-import React from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export default function Register() {
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
+  const form = useForm<z.infer<typeof zSignUpSchema>>({
+    resolver: zodResolver(zSignUpSchema),
+  });
+
+  const handleSubmit = form.handleSubmit(async (value) => {
+    await authClient.signUp.email(
+      {
+        ...value,
+        callbackURL: "/dashboard", // a url to redirect to after the user verifies their email (optional)
+      },
+      {
+        onRequest: () => {
+          //show loading
+        },
+        onSuccess: () => {
+          // Redirect to home screen after signup.
+          router.navigate({ to: "/" });
+        },
+        onError: (ctx) => {
+          // display the error message
+          alert(ctx.error.message);
+        },
+      },
+    );
+  });
 
   const validatePassword = (value: string) => {
     if (value.length < 8) {
@@ -77,8 +105,10 @@ export default function Register() {
             }
             isRequired
             isInvalid={
-              formData.confirmPassword &&
-              formData.password !== formData.confirmPassword
+              !!(
+                formData.confirmPassword &&
+                formData.password !== formData.confirmPassword
+              )
             }
             errorMessage={
               formData.confirmPassword &&
