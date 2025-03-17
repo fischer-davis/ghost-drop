@@ -37,7 +37,6 @@ export function createRouter() {
     Wrap: function WrapComponent({ children }) {
       return (
         <QueryClientProvider client={queryClient}>
-          {/*<HeroUIProvider>{children}</HeroUIProvider>*/}
           {children}
         </QueryClientProvider>
       );
