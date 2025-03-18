@@ -1,4 +1,6 @@
+import { useTRPC } from "@/utils/trpc.ts";
 import { Button } from "@heroui/button";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -6,10 +8,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  // const filesQuery = useQuery(trpc.file.getUploadedFiles.queryOptions());
-  //
-  // const files = filesQuery.data || [];
-  // console.log(files);
+  const trpc = useTRPC();
+  const { data = [], isLoading } = useQuery(
+    trpc.file.getUploadedFiles.queryOptions(),
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(data);
   return (
     <div className="p-2">
       Home
