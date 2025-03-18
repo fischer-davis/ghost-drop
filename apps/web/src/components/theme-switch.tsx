@@ -1,4 +1,5 @@
 import { SwitchProps, useSwitch } from "@heroui/switch";
+import { Tooltip } from "@heroui/tooltip";
 import { useTheme } from "@heroui/use-theme";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import clsx from "clsx";
@@ -70,7 +71,9 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           ),
         })}
       >
-        {isSelected ? <Moon size={22} /> : <Sun size={22} />}
+        <Tooltip content={isSelected ? "Dark Mode" : "Light Mode"}>
+          {isSelected ? <Moon size={22} /> : <Sun size={22} />}
+        </Tooltip>
       </div>
     </Component>
   );

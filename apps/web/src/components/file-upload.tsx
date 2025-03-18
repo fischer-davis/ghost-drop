@@ -74,8 +74,8 @@ export default function FileUploader() {
         className="hidden"
       />
       <Tooltip content="Upload">
-        <Button size="sm" onPress={handleClick}>
-          <Upload />
+        <Button isIconOnly color="secondary" onPress={handleClick}>
+          <Upload width={22} height={22} />
         </Button>
       </Tooltip>
     </>

@@ -1,5 +1,6 @@
+import DataGrid from "@/components/data-grid.tsx";
+import FileUploader from "@/components/file-upload.tsx";
 import { useTRPC } from "@/utils/trpc.ts";
-import { Button } from "@heroui/button";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -17,13 +18,9 @@ function Index() {
     return <div>Loading...</div>;
   }
 
-  console.log(data);
   return (
-    <div className="p-2">
-      Home
-      <Button variant="solid" color={"warning"}>
-        Click
-      </Button>
+    <div className="p-4 h-screen">
+      <DataGrid />
     </div>
   );
 }
