@@ -14,7 +14,7 @@ export type Context = Awaited<ReturnType<typeof createContext>>;
 // Register tRPC router with Fastify
 const registerTrpc = (app: any) => {
   app.register(fastifyTRPCPlugin, {
-    prefix: "/trpc",
+    prefix: "/api/trpc",
     trpcOptions: {
       router: appRouter,
       createContext,

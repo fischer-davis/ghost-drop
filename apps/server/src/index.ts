@@ -8,7 +8,7 @@ import FastifyBetterAuth from "fastify-better-auth";
 
 // import fp from "fastify-plugin";
 
-dotenv.config();
+dotenv.config({ path: "../../.env.development" });
 
 const app = fastify({ logger: true });
 
