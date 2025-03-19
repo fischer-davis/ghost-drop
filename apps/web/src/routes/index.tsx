@@ -19,7 +19,7 @@ function Index() {
   }
 
   return (
-    <div className="p-4 h-screen">
+    <div className="p-4">
       <DataGrid />
     </div>
   );

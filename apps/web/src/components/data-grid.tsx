@@ -630,7 +630,7 @@ export default function DataGrid() {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[625px]",
+        wrapper: "h-[calc(100vh-256px)]",
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
