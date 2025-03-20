@@ -9,8 +9,8 @@ export const zSignUpSchema = z.object({
   confirmPassword: z.string(),
 });
 
-export const signInSchema = z.object({
+export const zSignInSchema = z.object({
   email: z.string().email(),
   password: z.string(),
-  rememberMe: z.string().optional(),
+  rememberMe: z.boolean(),
 });

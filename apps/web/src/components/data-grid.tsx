@@ -15,243 +15,375 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
-import { User } from "lucide-react";
+import { log } from "console";
 import React from "react";
 
 export const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
-  { name: "AGE", uid: "age", sortable: true },
-  { name: "ROLE", uid: "role", sortable: true },
-  { name: "TEAM", uid: "team" },
-  { name: "EMAIL", uid: "email" },
-  { name: "STATUS", uid: "status", sortable: true },
+  { name: "SIZE", uid: "size", sortable: true },
+  { name: "CREATED AT", uid: "createdAt", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export const statusOptions = [
-  { name: "Active", uid: "active" },
-  { name: "Paused", uid: "paused" },
-  { name: "Vacation", uid: "vacation" },
+// Sample data matching our schema
+export const files = [
+  {
+    id: "file_1",
+    name: "document.pdf",
+    size: 1024000,
+    createdAt: new Date("2024-01-01").getTime(),
+  },
+  {
+    id: "file_2",
+    name: "image.jpg",
+    size: 2048000,
+    createdAt: new Date("2024-01-02").getTime(),
+  },
+  {
+    id: "file_3",
+    name: "data.csv",
+    size: 512000,
+    createdAt: new Date("2024-01-03").getTime(),
+  },
+  {
+    id: "file_4",
+    name: "video.mp4",
+    size: 10240000,
+    createdAt: new Date("2024-01-04").getTime(),
+  },
+  {
+    id: "file_5",
+    name: "audio.mp3",
+    size: 10240000,
+    createdAt: new Date("2024-01-05").getTime(),
+  },
+  {
+    id: "file_6",
+    name: "presentation.pptx",
+    size: 5120000,
+    createdAt: new Date("2024-01-06").getTime(),
+  },
+  {
+    id: "file_7", 
+    name: "spreadsheet.xlsx",
+    size: 1536000,
+    createdAt: new Date("2024-01-07").getTime(),
+  },
+  {
+    id: "file_8",
+    name: "code.js",
+    size: 256000,
+    createdAt: new Date("2024-01-08").getTime(),
+  },
+  {
+    id: "file_9",
+    name: "notes.txt",
+    size: 102400,
+    createdAt: new Date("2024-01-09").getTime(),
+  },
+  {
+    id: "file_10",
+    name: "design.psd",
+    size: 15360000,
+    createdAt: new Date("2024-01-10").getTime(),
+  },
+  {
+    id: "file_11",
+    name: "report.docx",
+    size: 2048000,
+    createdAt: new Date("2024-01-11").getTime(),
+  },
+  {
+    id: "file_12",
+    name: "backup.zip",
+    size: 20480000,
+    createdAt: new Date("2024-01-12").getTime(),
+  },
+  {
+    id: "file_13",
+    name: "logo.svg",
+    size: 51200,
+    createdAt: new Date("2024-01-13").getTime(),
+  },
+  {
+    id: "file_14",
+    name: "config.json",
+    size: 25600,
+    createdAt: new Date("2024-01-14").getTime(),
+  },
+  {
+    id: "file_15",
+    name: "styles.css",
+    size: 153600,
+    createdAt: new Date("2024-01-15").getTime(),
+  },
+  {
+    id: "file_16",
+    name: "database.sql",
+    size: 5120000,
+    createdAt: new Date("2024-01-16").getTime(),
+  },
+  {
+    id: "file_17",
+    name: "animation.gif",
+    size: 3072000,
+    createdAt: new Date("2024-01-17").getTime(),
+  },
+  {
+    id: "file_18",
+    name: "template.html",
+    size: 102400,
+    createdAt: new Date("2024-01-18").getTime(),
+  },
+  {
+    id: "file_19",
+    name: "manifest.xml",
+    size: 51200,
+    createdAt: new Date("2024-01-19").getTime(),
+  },
+  {
+    id: "file_20",
+    name: "screenshot.png",
+    size: 1024000,
+    createdAt: new Date("2024-01-20").getTime(),
+  },
+  {
+    id: "file_21",
+    name: "invoice.pdf",
+    size: 512000,
+    createdAt: new Date("2024-01-21").getTime(),
+  },
+  {
+    id: "file_22",
+    name: "meeting.mp4",
+    size: 51200000,
+    createdAt: new Date("2024-01-22").getTime(),
+  },
+  {
+    id: "file_23",
+    name: "podcast.mp3",
+    size: 15360000,
+    createdAt: new Date("2024-01-23").getTime(),
+  },
+  {
+    id: "file_24",
+    name: "diagram.drawio",
+    size: 256000,
+    createdAt: new Date("2024-01-24").getTime(),
+  },
+  {
+    id: "file_25",
+    name: "script.py",
+    size: 153600,
+    createdAt: new Date("2024-01-25").getTime(),
+  },
+  {
+    id: "file_26",
+    name: "requirements.txt",
+    size: 25600,
+    createdAt: new Date("2024-01-26").getTime(),
+  },
+  {
+    id: "file_27",
+    name: "mockup.sketch",
+    size: 10240000,
+    createdAt: new Date("2024-01-27").getTime(),
+  },
+  {
+    id: "file_28",
+    name: "changelog.md",
+    size: 76800,
+    createdAt: new Date("2024-01-28").getTime(),
+  },
+  {
+    id: "file_29",
+    name: "package.json",
+    size: 51200,
+    createdAt: new Date("2024-01-29").getTime(),
+  },
+  {
+    id: "file_30",
+    name: "index.tsx",
+    size: 204800,
+    createdAt: new Date("2024-01-30").getTime(),
+  },
+  {
+    id: "file_31",
+    name: "banner.jpg",
+    size: 2048000,
+    createdAt: new Date("2024-01-31").getTime(),
+  },
+  {
+    id: "file_32",
+    name: "survey.csv",
+    size: 512000,
+    createdAt: new Date("2024-02-01").getTime(),
+  },
+  {
+    id: "file_33",
+    name: "proposal.docx",
+    size: 1536000,
+    createdAt: new Date("2024-02-02").getTime(),
+  },
+  {
+    id: "file_34",
+    name: "analytics.xlsx",
+    size: 1024000,
+    createdAt: new Date("2024-02-03").getTime(),
+  },
+  {
+    id: "file_35",
+    name: "demo.webm",
+    size: 30720000,
+    createdAt: new Date("2024-02-04").getTime(),
+  },
+  {
+    id: "file_36",
+    name: "icons.ttf",
+    size: 512000,
+    createdAt: new Date("2024-02-05").getTime(),
+  },
+  {
+    id: "file_37",
+    name: "backup.sql",
+    size: 10240000,
+    createdAt: new Date("2024-02-06").getTime(),
+  },
+  {
+    id: "file_38",
+    name: "chart.svg",
+    size: 102400,
+    createdAt: new Date("2024-02-07").getTime(),
+  },
+  {
+    id: "file_39",
+    name: "settings.yaml",
+    size: 51200,
+    createdAt: new Date("2024-02-08").getTime(),
+  },
+  {
+    id: "file_40",
+    name: "layout.css",
+    size: 204800,
+    createdAt: new Date("2024-02-09").getTime(),
+  },
+  {
+    id: "file_41",
+    name: "report.pdf",
+    size: 3072000,
+    createdAt: new Date("2024-02-10").getTime(),
+  },
+  {
+    id: "file_42",
+    name: "background.png",
+    size: 5120000,
+    createdAt: new Date("2024-02-11").getTime(),
+  },
+  {
+    id: "file_43",
+    name: "contract.docx",
+    size: 1024000,
+    createdAt: new Date("2024-02-12").getTime(),
+  },
+  {
+    id: "file_44",
+    name: "metrics.json",
+    size: 76800,
+    createdAt: new Date("2024-02-13").getTime(),
+  },
+  {
+    id: "file_45",
+    name: "styles.scss",
+    size: 153600,
+    createdAt: new Date("2024-02-14").getTime(),
+  },
+  {
+    id: "file_46",
+    name: "avatar.jpg",
+    size: 512000,
+    createdAt: new Date("2024-02-15").getTime(),
+  },
+  {
+    id: "file_47",
+    name: "data.xml",
+    size: 102400,
+    createdAt: new Date("2024-02-16").getTime(),
+  },
+  {
+    id: "file_48",
+    name: "main.js",
+    size: 256000,
+    createdAt: new Date("2024-02-17").getTime(),
+  },
+  {
+    id: "file_49",
+    name: "readme.md",
+    size: 51200,
+    createdAt: new Date("2024-02-18").getTime(),
+  },
+  {
+    id: "file_50",
+    name: "docker-compose.yml",
+    size: 25600,
+    createdAt: new Date("2024-02-19").getTime(),
+  },
+  {
+    id: "file_51",
+    name: "schema.graphql",
+    size: 102400,
+    createdAt: new Date("2024-02-20").getTime(),
+  },
+  {
+    id: "file_52",
+    name: "robots.txt",
+    size: 12800,
+    createdAt: new Date("2024-02-21").getTime(),
+  },
+  {
+    id: "file_53",
+    name: "sitemap.xml",
+    size: 204800,
+    createdAt: new Date("2024-02-22").getTime(),
+  },
+  {
+    id: "file_54",
+    name: "favicon.ico",
+    size: 25600,
+    createdAt: new Date("2024-02-23").getTime(),
+  },
+  {
+    id: "file_55",
+    name: "webpack.config.js",
+    size: 76800,
+    createdAt: new Date("2024-02-24").getTime(),
+  }
 ];
 
-export const users = [
-  {
-    id: 1,
-    name: "Tony Reichert",
-    role: "CEO",
-    team: "Management",
-    status: "active",
-    age: "29",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    email: "tony.reichert@example.com",
-  },
-  {
-    id: 2,
-    name: "Zoey Lang",
-    role: "Tech Lead",
-    team: "Development",
-    status: "paused",
-    age: "25",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    email: "zoey.lang@example.com",
-  },
-  {
-    id: 3,
-    name: "Jane Fisher",
-    role: "Sr. Dev",
-    team: "Development",
-    status: "active",
-    age: "22",
-    avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-    email: "jane.fisher@example.com",
-  },
-  {
-    id: 4,
-    name: "William Howard",
-    role: "C.M.",
-    team: "Marketing",
-    status: "vacation",
-    age: "28",
-    avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-    email: "william.howard@example.com",
-  },
-  {
-    id: 5,
-    name: "Kristen Copper",
-    role: "S. Manager",
-    team: "Sales",
-    status: "active",
-    age: "24",
-    avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-    email: "kristen.cooper@example.com",
-  },
-  {
-    id: 6,
-    name: "Brian Kim",
-    role: "P. Manager",
-    team: "Management",
-    age: "29",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    email: "brian.kim@example.com",
-    status: "Active",
-  },
-  {
-    id: 7,
-    name: "Michael Hunt",
-    role: "Designer",
-    team: "Design",
-    status: "paused",
-    age: "27",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
-    email: "michael.hunt@example.com",
-  },
-  {
-    id: 8,
-    name: "Samantha Brooks",
-    role: "HR Manager",
-    team: "HR",
-    status: "active",
-    age: "31",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e27027008d",
-    email: "samantha.brooks@example.com",
-  },
-  {
-    id: 9,
-    name: "Frank Harrison",
-    role: "F. Manager",
-    team: "Finance",
-    status: "vacation",
-    age: "33",
-    avatar: "https://i.pravatar.cc/150?img=4",
-    email: "frank.harrison@example.com",
-  },
-  {
-    id: 10,
-    name: "Emma Adams",
-    role: "Ops Manager",
-    team: "Operations",
-    status: "active",
-    age: "35",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    email: "emma.adams@example.com",
-  },
-  {
-    id: 11,
-    name: "Brandon Stevens",
-    role: "Jr. Dev",
-    team: "Development",
-    status: "active",
-    age: "22",
-    avatar: "https://i.pravatar.cc/150?img=8",
-    email: "brandon.stevens@example.com",
-  },
-  {
-    id: 12,
-    name: "Megan Richards",
-    role: "P. Manager",
-    team: "Product",
-    status: "paused",
-    age: "28",
-    avatar: "https://i.pravatar.cc/150?img=10",
-    email: "megan.richards@example.com",
-  },
-  {
-    id: 13,
-    name: "Oliver Scott",
-    role: "S. Manager",
-    team: "Security",
-    status: "active",
-    age: "37",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    email: "oliver.scott@example.com",
-  },
-  {
-    id: 14,
-    name: "Grace Allen",
-    role: "M. Specialist",
-    team: "Marketing",
-    status: "active",
-    age: "30",
-    avatar: "https://i.pravatar.cc/150?img=16",
-    email: "grace.allen@example.com",
-  },
-  {
-    id: 15,
-    name: "Noah Carter",
-    role: "IT Specialist",
-    team: "I. Technology",
-    status: "paused",
-    age: "31",
-    avatar: "https://i.pravatar.cc/150?img=15",
-    email: "noah.carter@example.com",
-  },
-  {
-    id: 16,
-    name: "Ava Perez",
-    role: "Manager",
-    team: "Sales",
-    status: "active",
-    age: "29",
-    avatar: "https://i.pravatar.cc/150?img=20",
-    email: "ava.perez@example.com",
-  },
-  {
-    id: 17,
-    name: "Liam Johnson",
-    role: "Data Analyst",
-    team: "Analysis",
-    status: "active",
-    age: "28",
-    avatar: "https://i.pravatar.cc/150?img=33",
-    email: "liam.johnson@example.com",
-  },
-  {
-    id: 18,
-    name: "Sophia Taylor",
-    role: "QA Analyst",
-    team: "Testing",
-    status: "active",
-    age: "27",
-    avatar: "https://i.pravatar.cc/150?img=29",
-    email: "sophia.taylor@example.com",
-  },
-  {
-    id: 19,
-    name: "Lucas Harris",
-    role: "Administrator",
-    team: "Information Technology",
-    status: "paused",
-    age: "32",
-    avatar: "https://i.pravatar.cc/150?img=50",
-    email: "lucas.harris@example.com",
-  },
-  {
-    id: 20,
-    name: "Mia Robinson",
-    role: "Coordinator",
-    team: "Operations",
-    status: "active",
-    age: "26",
-    avatar: "https://i.pravatar.cc/150?img=45",
-    email: "mia.robinson@example.com",
-  },
-];
-
-export function capitalize(s) {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
+export function capitalize(str: string): string {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 }
 
-export const PlusIcon = ({ size = 24, width, height, ...props }) => {
+export const PlusIcon = ({ 
+  size = 24, 
+  width = size, 
+  height = size, 
+  ...props 
+}: { 
+  size?: number; 
+  width?: number; 
+  height?: number; 
+  [key: string]: any; 
+}) => {
   return (
     <svg
       aria-hidden="true"
       fill="none"
       focusable="false"
-      height={size || height}
+      height={height}
       role="presentation"
       viewBox="0 0 24 24"
-      width={size || width}
+      width={width}
       {...props}
     >
       <g
@@ -268,16 +400,26 @@ export const PlusIcon = ({ size = 24, width, height, ...props }) => {
   );
 };
 
-export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => {
+export const VerticalDotsIcon = ({ 
+  size = 24, 
+  width = size, 
+  height = size, 
+  ...props 
+}: { 
+  size?: number; 
+  width?: number; 
+  height?: number; 
+  [key: string]: any; 
+}) => {
   return (
     <svg
       aria-hidden="true"
       fill="none"
       focusable="false"
-      height={size || height}
+      height={height}
       role="presentation"
       viewBox="0 0 24 24"
-      width={size || width}
+      width={width}
       {...props}
     >
       <path
@@ -288,7 +430,7 @@ export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => {
   );
 };
 
-export const SearchIcon = (props) => {
+export const SearchIcon = (props: { [key: string]: any }) => {
   return (
     <svg
       aria-hidden="true"
@@ -318,7 +460,7 @@ export const SearchIcon = (props) => {
   );
 };
 
-export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }) => {
+export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: { strokeWidth?: number; [key: string]: any }) => {
   return (
     <svg
       aria-hidden="true"
@@ -342,24 +484,29 @@ export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }) => {
   );
 };
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+const INITIAL_VISIBLE_COLUMNS = ["name", "size", "createdAt", "actions"];
+
+type File = {
+  id: string;
+  name: string;
+  size: number;
+  createdAt: number;
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+type TableColumnKey = keyof File | "actions";
 
 export default function DataGrid() {
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [visibleColumns, setVisibleColumns] = React.useState(
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<string> | string>(new Set([]));
+  const [visibleColumns, setVisibleColumns] = React.useState<Set<string>>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
-  const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [sortDescriptor, setSortDescriptor] = React.useState<{
+    column: keyof File;
+    direction: "ascending" | "descending";
+  }>({
+    column: "createdAt",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -367,32 +514,22 @@ export default function DataGrid() {
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
-
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredFiles = [...files];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      filteredFiles = filteredFiles.filter((file) =>
+        file.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredFiles;
+  }, [files, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -413,50 +550,56 @@ export default function DataGrid() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((file: File, columnKey: TableColumnKey) => {
+    if (columnKey === "actions") {
+      return (
+        <div className="relative flex justify-end items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <VerticalDotsIcon className="text-default-300" width={20} height={20} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem key="download">Download</DropdownItem>
+              <DropdownItem key="rename">Rename</DropdownItem>
+              <DropdownItem key="delete" className="text-danger">Delete</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      );
+    }
+
+    const cellValue = file[columnKey];
 
     switch (columnKey) {
       case "name":
         return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
+          <div className="flex items-center gap-2">
+            <div className="text-bold text-small">{cellValue}</div>
           </div>
         );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem key="view">View</DropdownItem>
-                <DropdownItem key="edit">Edit</DropdownItem>
-                <DropdownItem key="delete">Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
+      case "size":
+        return formatFileSize(cellValue as number);
+      case "createdAt":
+        return new Date(cellValue as number).toLocaleDateString();
       default:
         return cellValue;
     }
   }, []);
+
+  function formatFileSize(bytes: number): string {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let size = bytes;
+    let unitIndex = 0;
+    
+    while (size >= 1024 && unitIndex < units.length - 1) {
+      size /= 1024;
+      unitIndex++;
+    }
+    
+    return `${size.toFixed(1)} ${units[unitIndex]}`;
+  }
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -470,12 +613,12 @@ export default function DataGrid() {
     }
   }, [page]);
 
-  const onRowsPerPageChange = React.useCallback((e) => {
+  const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
+  const onSearchChange = React.useCallback((value: string) => {
     if (value) {
       setFilterValue(value);
       setPage(1);
@@ -496,37 +639,13 @@ export default function DataGrid() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by filename..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
@@ -542,7 +661,7 @@ export default function DataGrid() {
                 closeOnSelect={false}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
+                onSelectionChange={(keys) => setVisibleColumns(keys as Set<string>)}
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
@@ -551,14 +670,14 @@ export default function DataGrid() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
+            <Button color="primary" endContent={<PlusIcon width={20} height={20} />}>
+              Upload File
             </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {files.length} files
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -566,9 +685,9 @@ export default function DataGrid() {
               className="bg-transparent outline-none text-default-400 text-small"
               onChange={onRowsPerPageChange}
             >
-              <option value="5">5</option>
-              <option value="10">10</option>
               <option value="15">15</option>
+              <option value="30">30</option>
+              <option value="45">45</option>
             </select>
           </label>
         </div>
@@ -576,21 +695,22 @@ export default function DataGrid() {
     );
   }, [
     filterValue,
-    statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    files.length,
     onSearchChange,
-    hasSearchFilter,
   ]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+          {
+            typeof selectedKeys === "string" ? <>
+            {filteredItems.length} of {filteredItems.length} selected
+            </> :
+          <>{selectedKeys.size} of {filteredItems.length} selected</>
+          }
         </span>
         <Pagination
           isCompact
@@ -626,7 +746,7 @@ export default function DataGrid() {
   return (
     <Table
       isHeaderSticky
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label="Files table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
@@ -637,8 +757,8 @@ export default function DataGrid() {
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
+      onSelectionChange={(keys) => { typeof keys === "string" ? setSelectedKeys(keys) : setSelectedKeys(keys as Set<string>)}}
+      onSortChange={(descriptor) => setSortDescriptor(descriptor as typeof sortDescriptor)}
     >
       <TableHeader columns={headerColumns}>
         {(column) => (
@@ -651,11 +771,11 @@ export default function DataGrid() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No files found"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>{renderCell(item, columnKey as TableColumnKey)}</TableCell>
             )}
           </TableRow>
         )}
