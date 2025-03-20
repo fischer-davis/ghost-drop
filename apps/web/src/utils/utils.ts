@@ -8,10 +8,6 @@ export const zSignUpSchema = z
     email: z.string().email(),
     password: z.string().min(8).max(PASSWORD_MAX_LENGTH),
     confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
   });
 
 export const signInSchema = z.object({

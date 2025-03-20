@@ -4,48 +4,49 @@ import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export default function Register() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const form = useForm<z.infer<typeof zSignUpSchema>>({
-    resolver: zodResolver(zSignUpSchema),
-  });
-
-  const handleSubmit = form.handleSubmit(async (value) => {
-    await authClient.signUp.email(
-      {
-        ...value,
-        callbackURL: "/dashboard", // a url to redirect to after the user verifies their email (optional)
-      },
-      {
-        onRequest: () => {
-          //show loading
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validators: {
+      onChange: zSignUpSchema,
+    },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+      await authClient.signUp.email(
+        {
+          ...value,
+          callbackURL: "/dashboard", // a url to redirect to after the user verifies their email (optional)
         },
-        onSuccess: () => {
-          // Redirect to home screen after signup.
-          router.navigate({ to: "/" });
+        {
+          onRequest: () => {
+            //show loading
+          },
+          onSuccess: () => {
+            // Redirect to home screen after signup.
+            router.navigate({ to: "/" });
+          },
+          onError: (ctx) => {
+            // display the error message
+            alert(ctx.error.message);
+          },
         },
-        onError: (ctx) => {
-          // display the error message
-          alert(ctx.error.message);
-        },
-      },
-    );
+      );
+    },
   });
 
   const validatePassword = (value: string) => {
@@ -62,65 +63,120 @@ export default function Register() {
           <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-default-500">Enter your details to get started</p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Email"
-            placeholder="Enter your email"
-            type="email"
-            value={formData.email}
-            onValueChange={(value) =>
-              setFormData({ ...formData, email: value })
-            }
-            isRequired
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-4"
+        >
+          <form.Field
+            name="name"
+            children={(field) => {
+              return (
+                <Input
+                  label="Name"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  placeholder="Enter your name"
+                  onValueChange={(value) => field.handleChange(value)}
+                  onBlur={field.handleBlur}
+                  isRequired
+                />
+              );
+            }}
           />
-
-          <Input
-            label="Password"
-            placeholder="Enter your password"
-            value={formData.password}
-            onValueChange={(value) =>
-              setFormData({ ...formData, password: value })
-            }
-            isRequired
-            validate={validatePassword}
-            type={isVisible ? "text" : "password"}
-            endContent={
-              <button type="button" onClick={toggleVisibility}>
-                {isVisible ? (
-                  <Eye size={20} className="text-default-400" />
-                ) : (
-                  <EyeOff size={20} className="text-default-400" />
-                )}
-              </button>
-            }
+          <form.Field
+            name="email"
+            children={(field) => {
+              return (
+                <Input
+                  label="Email"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  placeholder="Enter your email"
+                  onValueChange={(value) => field.handleChange(value)}
+                  onBlur={field.handleBlur}
+                  isRequired
+                />
+              );
+            }}
           />
-
-          <Input
-            label="Confirm Password"
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onValueChange={(value) =>
-              setFormData({ ...formData, confirmPassword: value })
-            }
-            isRequired
-            isInvalid={
-              !!(
-                formData.confirmPassword &&
-                formData.password !== formData.confirmPassword
-              )
-            }
-            errorMessage={
-              formData.confirmPassword &&
-              formData.password !== formData.confirmPassword
-                ? "Passwords do not match"
-                : ""
-            }
-            type={isVisible ? "text" : "password"}
+          <form.Field
+            name="password"
+            children={(field) => {
+              return (
+                <Input
+                  label="Password"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  placeholder="Enter your password"
+                  onValueChange={(value) => field.handleChange(value)}
+                  onBlur={field.handleBlur}
+                  isRequired
+                  validate={validatePassword}
+                  type={isVisible ? "text" : "password"}
+                  endContent={
+                    <button type="button" onClick={toggleVisibility}>
+                      {isVisible ? (
+                        <Eye size={20} className="text-default-400" />
+                      ) : (
+                        <EyeOff size={20} className="text-default-400" />
+                      )}
+                    </button>
+                  }
+                />
+              );
+            }}
           />
-          <Button type="submit" color="primary" className="w-full">
-            Sign Up
-          </Button>
+          <form.Field
+            name="confirmPassword"
+            children={(field) => {
+              return (
+                <Input
+                  label="Confirm Password"
+                  placeholder="Confirm your password"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onValueChange={(value) => field.handleChange(value)}
+                  onBlur={field.handleBlur}
+                  isRequired
+                  isInvalid={
+                    !!(
+                      form.getFieldValue("confirmPassword") &&
+                      field.state.value !==
+                        form.getFieldValue("confirmPassword")
+                    )
+                  }
+                  errorMessage={
+                    form.getFieldValue("confirmPassword") &&
+                    field.state.value !== form.getFieldValue("confirmPassword")
+                      ? "Passwords do not match"
+                      : ""
+                  }
+                  type={isVisible ? "text" : "password"}
+                />
+              );
+            }}
+          />
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => (
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                color="primary"
+                className="w-full"
+              >
+                {isSubmitting ? "..." : "Sign Up"}
+              </Button>
+            )}
+          />
         </form>
         <div className="text-center text-sm">
           Already have an account?{" "}
