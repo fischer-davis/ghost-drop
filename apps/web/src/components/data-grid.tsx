@@ -1,3 +1,4 @@
+import { log } from "console";
 import { Button } from "@heroui/button";
 import {
   Dropdown,
@@ -15,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
-import { log } from "console";
 import React from "react";
 
 export const columns = [
@@ -65,7 +65,7 @@ export const files = [
     createdAt: new Date("2024-01-06").getTime(),
   },
   {
-    id: "file_7", 
+    id: "file_7",
     name: "spreadsheet.xlsx",
     size: 1536000,
     createdAt: new Date("2024-01-07").getTime(),
@@ -357,23 +357,23 @@ export const files = [
     name: "webpack.config.js",
     size: 76800,
     createdAt: new Date("2024-02-24").getTime(),
-  }
+  },
 ];
 
 export function capitalize(str: string): string {
   return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 }
 
-export const PlusIcon = ({ 
-  size = 24, 
-  width = size, 
-  height = size, 
-  ...props 
-}: { 
-  size?: number; 
-  width?: number; 
-  height?: number; 
-  [key: string]: any; 
+export const PlusIcon = ({
+  size = 24,
+  width = size,
+  height = size,
+  ...props
+}: {
+  size?: number;
+  width?: number;
+  height?: number;
+  [key: string]: any;
 }) => {
   return (
     <svg
@@ -400,16 +400,16 @@ export const PlusIcon = ({
   );
 };
 
-export const VerticalDotsIcon = ({ 
-  size = 24, 
-  width = size, 
-  height = size, 
-  ...props 
-}: { 
-  size?: number; 
-  width?: number; 
-  height?: number; 
-  [key: string]: any; 
+export const VerticalDotsIcon = ({
+  size = 24,
+  width = size,
+  height = size,
+  ...props
+}: {
+  size?: number;
+  width?: number;
+  height?: number;
+  [key: string]: any;
 }) => {
   return (
     <svg
@@ -460,7 +460,13 @@ export const SearchIcon = (props: { [key: string]: any }) => {
   );
 };
 
-export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: { strokeWidth?: number; [key: string]: any }) => {
+export const ChevronDownIcon = ({
+  strokeWidth = 1.5,
+  ...otherProps
+}: {
+  strokeWidth?: number;
+  [key: string]: any;
+}) => {
   return (
     <svg
       aria-hidden="true"
@@ -497,7 +503,9 @@ type TableColumnKey = keyof File | "actions";
 
 export default function DataGrid() {
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState<Set<string> | string>(new Set([]));
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<string> | string>(
+    new Set([]),
+  );
   const [visibleColumns, setVisibleColumns] = React.useState<Set<string>>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
@@ -550,54 +558,63 @@ export default function DataGrid() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((file: File, columnKey: TableColumnKey) => {
-    if (columnKey === "actions") {
-      return (
-        <div className="relative flex justify-end items-center gap-2">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light">
-                <VerticalDotsIcon className="text-default-300" width={20} height={20} />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem key="download">Download</DropdownItem>
-              <DropdownItem key="rename">Rename</DropdownItem>
-              <DropdownItem key="delete" className="text-danger">Delete</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      );
-    }
-
-    const cellValue = file[columnKey];
-
-    switch (columnKey) {
-      case "name":
+  const renderCell = React.useCallback(
+    (file: File, columnKey: TableColumnKey) => {
+      if (columnKey === "actions") {
         return (
-          <div className="flex items-center gap-2">
-            <div className="text-bold text-small">{cellValue}</div>
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <VerticalDotsIcon
+                    className="text-default-300"
+                    width={20}
+                    height={20}
+                  />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem key="download">Download</DropdownItem>
+                <DropdownItem key="rename">Rename</DropdownItem>
+                <DropdownItem key="delete" className="text-danger">
+                  Delete
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         );
-      case "size":
-        return formatFileSize(cellValue as number);
-      case "createdAt":
-        return new Date(cellValue as number).toLocaleDateString();
-      default:
-        return cellValue;
-    }
-  }, []);
+      }
+
+      const cellValue = file[columnKey];
+
+      switch (columnKey) {
+        case "name":
+          return (
+            <div className="flex items-center gap-2">
+              <div className="text-bold text-small">{cellValue}</div>
+            </div>
+          );
+        case "size":
+          return formatFileSize(cellValue as number);
+        case "createdAt":
+          return new Date(cellValue as number).toLocaleDateString();
+        default:
+          return cellValue;
+      }
+    },
+    [],
+  );
 
   function formatFileSize(bytes: number): string {
-    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const units = ["B", "KB", "MB", "GB", "TB"];
     let size = bytes;
     let unitIndex = 0;
-    
+
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-    
+
     return `${size.toFixed(1)} ${units[unitIndex]}`;
   }
 
@@ -613,10 +630,13 @@ export default function DataGrid() {
     }
   }, [page]);
 
-  const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
-  }, []);
+  const onRowsPerPageChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setRowsPerPage(Number(e.target.value));
+      setPage(1);
+    },
+    [],
+  );
 
   const onSearchChange = React.useCallback((value: string) => {
     if (value) {
@@ -661,7 +681,9 @@ export default function DataGrid() {
                 closeOnSelect={false}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
-                onSelectionChange={(keys) => setVisibleColumns(keys as Set<string>)}
+                onSelectionChange={(keys) =>
+                  setVisibleColumns(keys as Set<string>)
+                }
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
@@ -670,7 +692,10 @@ export default function DataGrid() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon width={20} height={20} />}>
+            <Button
+              color="primary"
+              endContent={<PlusIcon width={20} height={20} />}
+            >
               Upload File
             </Button>
           </div>
@@ -705,12 +730,15 @@ export default function DataGrid() {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {
-            typeof selectedKeys === "string" ? <>
-            {filteredItems.length} of {filteredItems.length} selected
-            </> :
-          <>{selectedKeys.size} of {filteredItems.length} selected</>
-          }
+          {typeof selectedKeys === "string" ? (
+            <>
+              {filteredItems.length} of {filteredItems.length} selected
+            </>
+          ) : (
+            <>
+              {selectedKeys.size} of {filteredItems.length} selected
+            </>
+          )}
         </span>
         <Pagination
           isCompact
@@ -757,8 +785,14 @@ export default function DataGrid() {
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
-      onSelectionChange={(keys) => { typeof keys === "string" ? setSelectedKeys(keys) : setSelectedKeys(keys as Set<string>)}}
-      onSortChange={(descriptor) => setSortDescriptor(descriptor as typeof sortDescriptor)}
+      onSelectionChange={(keys) => {
+        typeof keys === "string"
+          ? setSelectedKeys(keys)
+          : setSelectedKeys(keys as Set<string>);
+      }}
+      onSortChange={(descriptor) =>
+        setSortDescriptor(descriptor as typeof sortDescriptor)
+      }
     >
       <TableHeader columns={headerColumns}>
         {(column) => (
@@ -775,7 +809,9 @@ export default function DataGrid() {
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey as TableColumnKey)}</TableCell>
+              <TableCell>
+                {renderCell(item, columnKey as TableColumnKey)}
+              </TableCell>
             )}
           </TableRow>
         )}

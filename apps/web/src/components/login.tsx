@@ -33,7 +33,7 @@ export default function Login() {
         {
           email: value.email,
           password: value.password,
-          callbackURL: "/home",
+          callbackURL: "/",
           rememberMe: value.rememberMe,
         },
         {
@@ -86,7 +86,9 @@ export default function Login() {
                   onBlur={field.handleBlur}
                   isInvalid={
                     field.state.value &&
-                    !z.string().email().safeParse(field.state.value).success ? true : false
+                    !z.string().email().safeParse(field.state.value).success
+                      ? true
+                      : false
                   }
                   errorMessage="Invalid email"
                   isRequired

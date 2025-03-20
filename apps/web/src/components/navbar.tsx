@@ -1,6 +1,5 @@
 import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { Link } from "@heroui/link";
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
@@ -8,8 +7,11 @@ import {
   NavbarItem,
 } from "@heroui/navbar";
 import { Progress } from "@heroui/progress";
+import UserDropdown from "./user-dropdown";
+import { Link } from "@tanstack/react-router";
 
 export const Navbar = () => {
+
   return (
     <HeroUINavbar maxWidth="xl" className="flex" position="sticky">
       <NavbarContent className="flex-1" justify="start">
@@ -17,7 +19,7 @@ export const Navbar = () => {
           <Link
             className="flex justify-start items-center gap-1"
             color="foreground"
-            href="/"
+            to="/"
           >
             <Logo />
             <p className="font-bold text-inherit">Ghost Drop</p>
@@ -30,6 +32,9 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent className="flex-1" justify="end">
+        <NavbarItem className="hidden sm:flex gap-2">
+          <UserDropdown />
+        </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>

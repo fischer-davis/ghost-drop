@@ -14,7 +14,7 @@ import { Route as rootRoute } from "./routes/__root";
 import { Route as IndexImport } from "./routes/index";
 import { Route as SigninImport } from "./routes/signin";
 import { Route as SignupImport } from "./routes/signup";
-
+import { Route as SettingsImport } from "./routes/settings";
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
@@ -32,6 +32,12 @@ const SigninRoute = SigninImport.update({
 const IndexRoute = IndexImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const SettingsRoute = SettingsImport.update({
+  id: "/settings",
+  path: "/settings",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -60,6 +66,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof SignupImport;
       parentRoute: typeof rootRoute;
     };
+    "/settings": {
+      id: "/settings";
+      path: "/settings";
+      fullPath: "/settings";
+      preLoaderRoute: typeof SettingsImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -69,12 +82,14 @@ export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "/signin": typeof SigninRoute;
   "/signup": typeof SignupRoute;
+  "/settings": typeof SettingsRoute;
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "/signin": typeof SigninRoute;
   "/signup": typeof SignupRoute;
+  "/settings": typeof SettingsRoute;
 }
 
 export interface FileRoutesById {
@@ -82,14 +97,15 @@ export interface FileRoutesById {
   "/": typeof IndexRoute;
   "/signin": typeof SigninRoute;
   "/signup": typeof SignupRoute;
+  "/settings": typeof SettingsRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/signin" | "/signup";
+  fullPaths: "/" | "/signin" | "/signup" | "/settings";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/signin" | "/signup";
-  id: "__root__" | "/" | "/signin" | "/signup";
+  to: "/" | "/signin" | "/signup" | "/settings";
+  id: "__root__" | "/" | "/signin" | "/signup" | "/settings";
   fileRoutesById: FileRoutesById;
 }
 
@@ -97,12 +113,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   SigninRoute: typeof SigninRoute;
   SignupRoute: typeof SignupRoute;
+  SettingsRoute: typeof SettingsRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
+  SettingsRoute: SettingsRoute,
 };
 
 export const routeTree = rootRoute
@@ -128,6 +146,9 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     }
   }
 }
