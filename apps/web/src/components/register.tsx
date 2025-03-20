@@ -8,6 +8,7 @@ import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { z } from "zod";
 
 export default function Register() {
   const [isVisible, setIsVisible] = useState(false);
@@ -100,6 +101,13 @@ export default function Register() {
                   placeholder="Enter your email"
                   onValueChange={(value) => field.handleChange(value)}
                   onBlur={field.handleBlur}
+                  isInvalid={
+                    field.state.value &&
+                    !z.string().email().safeParse(field.state.value)
+                      ? true
+                      : false
+                  }
+                  errorMessage="Invalid email"
                   isRequired
                 />
               );
@@ -147,15 +155,14 @@ export default function Register() {
                   onBlur={field.handleBlur}
                   isRequired
                   isInvalid={
-                    !!(
-                      form.getFieldValue("confirmPassword") &&
-                      field.state.value !==
-                        form.getFieldValue("confirmPassword")
-                    )
+                    field.state.value &&
+                    field.state.value !== form.getFieldValue("password")
+                      ? true
+                      : false
                   }
                   errorMessage={
-                    form.getFieldValue("confirmPassword") &&
-                    field.state.value !== form.getFieldValue("confirmPassword")
+                    field.state.value &&
+                    field.state.value !== form.getFieldValue("password")
                       ? "Passwords do not match"
                       : ""
                   }
