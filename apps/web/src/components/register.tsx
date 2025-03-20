@@ -3,9 +3,8 @@ import { zSignUpSchema } from "@/utils/utils.ts";
 import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Input } from "@heroui/input";
-import { Link } from "@heroui/link";
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -185,9 +184,9 @@ export default function Register() {
             )}
           />
         </form>
-        <div className="text-center text-sm">
+        <div className="text-center text-sm text-default-500">
           Already have an account?{" "}
-          <Link href="#" color="primary">
+          <Link to="/signin" className="text-primary">
             Log in
           </Link>
         </div>
