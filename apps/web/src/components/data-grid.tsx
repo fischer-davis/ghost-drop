@@ -1,4 +1,5 @@
-import { log } from "console";
+import { useProgress } from "@/stores/useProgress.ts";
+import { useTRPC } from "@/utils/trpc.ts";
 import { Button } from "@heroui/button";
 import {
   Dropdown,
@@ -16,7 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
-import React from "react";
+import { VisuallyHidden } from "@react-aria/visually-hidden";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useRef, useState } from "react";
+import * as tus from "tus-js-client";
 
 export const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -502,22 +506,26 @@ type File = {
 type TableColumnKey = keyof File | "actions";
 
 export default function DataGrid() {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState<Set<string> | string>(
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const { setProgress, setUploading } = useProgress();
+  const [filterValue, setFilterValue] = useState("");
+  const [selectedKeys, setSelectedKeys] = useState<Set<string> | string>(
     new Set([]),
   );
-  const [visibleColumns, setVisibleColumns] = React.useState<Set<string>>(
+  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
-  const [sortDescriptor, setSortDescriptor] = React.useState<{
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [sortDescriptor, setSortDescriptor] = useState<{
     column: keyof File;
     direction: "ascending" | "descending";
   }>({
     column: "createdAt",
     direction: "ascending",
   });
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -652,6 +660,56 @@ export default function DataGrid() {
     setPage(1);
   }, []);
 
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+
+    // Create a new tus upload
+    const upload = new tus.Upload(file, {
+      endpoint: "http://localhost:3015/files",
+      retryDelays: [0, 3000, 5000, 10000, 20000],
+      metadata: {
+        filename: file.name,
+        filetype: file.type,
+      },
+      onError: function (error) {
+        console.log("Failed because: " + error);
+      },
+      onBeforeRequest: function () {
+        setUploading(true);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+        console.log(bytesUploaded, bytesTotal, percentage + "%");
+        setProgress(Number(percentage));
+      },
+      onSuccess: function () {
+        setUploading(false);
+        setProgress(0);
+        queryClient.invalidateQueries({
+          queryKey: trpc.file.getUploadedFiles.queryKey(),
+        });
+      },
+    });
+
+    // Check if there are any previous uploads to continue.
+    upload.findPreviousUploads().then(function (previousUploads) {
+      // Found previous uploads so we select the first one.
+      if (previousUploads.length) {
+        upload.resumeFromPreviousUpload(previousUploads[0]);
+      }
+
+      console.log("upload");
+
+      // Start the upload
+      upload.start();
+    });
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -692,9 +750,18 @@ export default function DataGrid() {
                 ))}
               </DropdownMenu>
             </Dropdown>
+            <VisuallyHidden>
+              <input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={handleUpload}
+              />
+            </VisuallyHidden>
             <Button
               color="primary"
               endContent={<PlusIcon width={20} height={20} />}
+              onClick={handleClick}
             >
               Upload File
             </Button>
