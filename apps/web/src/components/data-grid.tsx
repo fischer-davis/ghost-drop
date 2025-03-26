@@ -1,4 +1,4 @@
-import { useProgress } from "@/stores/useProgress.ts";
+import Upload from "@/components/upload-button.tsx";
 import { useTRPC } from "@/utils/trpc.ts";
 import { Button } from "@heroui/button";
 import {
@@ -17,10 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
-import { useQueryClient } from "@tanstack/react-query";
-import React, { useRef, useState } from "react";
-import * as tus from "tus-js-client";
+import { useQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react";
+import React, { useState } from "react";
 
 export const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -30,379 +29,9 @@ export const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-// Sample data matching our schema
-export const files = [
-  {
-    id: "file_1",
-    name: "document.pdf",
-    size: 1024000,
-    createdAt: new Date("2024-01-01").getTime(),
-  },
-  {
-    id: "file_2",
-    name: "image.jpg",
-    size: 2048000,
-    createdAt: new Date("2024-01-02").getTime(),
-  },
-  {
-    id: "file_3",
-    name: "data.csv",
-    size: 512000,
-    createdAt: new Date("2024-01-03").getTime(),
-  },
-  {
-    id: "file_4",
-    name: "video.mp4",
-    size: 10240000,
-    createdAt: new Date("2024-01-04").getTime(),
-  },
-  {
-    id: "file_5",
-    name: "audio.mp3",
-    size: 10240000,
-    createdAt: new Date("2024-01-05").getTime(),
-  },
-  {
-    id: "file_6",
-    name: "presentation.pptx",
-    size: 5120000,
-    createdAt: new Date("2024-01-06").getTime(),
-  },
-  {
-    id: "file_7",
-    name: "spreadsheet.xlsx",
-    size: 1536000,
-    createdAt: new Date("2024-01-07").getTime(),
-  },
-  {
-    id: "file_8",
-    name: "code.js",
-    size: 256000,
-    createdAt: new Date("2024-01-08").getTime(),
-  },
-  {
-    id: "file_9",
-    name: "notes.txt",
-    size: 102400,
-    createdAt: new Date("2024-01-09").getTime(),
-  },
-  {
-    id: "file_10",
-    name: "design.psd",
-    size: 15360000,
-    createdAt: new Date("2024-01-10").getTime(),
-  },
-  {
-    id: "file_11",
-    name: "report.docx",
-    size: 2048000,
-    createdAt: new Date("2024-01-11").getTime(),
-  },
-  {
-    id: "file_12",
-    name: "backup.zip",
-    size: 20480000,
-    createdAt: new Date("2024-01-12").getTime(),
-  },
-  {
-    id: "file_13",
-    name: "logo.svg",
-    size: 51200,
-    createdAt: new Date("2024-01-13").getTime(),
-  },
-  {
-    id: "file_14",
-    name: "config.json",
-    size: 25600,
-    createdAt: new Date("2024-01-14").getTime(),
-  },
-  {
-    id: "file_15",
-    name: "styles.css",
-    size: 153600,
-    createdAt: new Date("2024-01-15").getTime(),
-  },
-  {
-    id: "file_16",
-    name: "database.sql",
-    size: 5120000,
-    createdAt: new Date("2024-01-16").getTime(),
-  },
-  {
-    id: "file_17",
-    name: "animation.gif",
-    size: 3072000,
-    createdAt: new Date("2024-01-17").getTime(),
-  },
-  {
-    id: "file_18",
-    name: "template.html",
-    size: 102400,
-    createdAt: new Date("2024-01-18").getTime(),
-  },
-  {
-    id: "file_19",
-    name: "manifest.xml",
-    size: 51200,
-    createdAt: new Date("2024-01-19").getTime(),
-  },
-  {
-    id: "file_20",
-    name: "screenshot.png",
-    size: 1024000,
-    createdAt: new Date("2024-01-20").getTime(),
-  },
-  {
-    id: "file_21",
-    name: "invoice.pdf",
-    size: 512000,
-    createdAt: new Date("2024-01-21").getTime(),
-  },
-  {
-    id: "file_22",
-    name: "meeting.mp4",
-    size: 51200000,
-    createdAt: new Date("2024-01-22").getTime(),
-  },
-  {
-    id: "file_23",
-    name: "podcast.mp3",
-    size: 15360000,
-    createdAt: new Date("2024-01-23").getTime(),
-  },
-  {
-    id: "file_24",
-    name: "diagram.drawio",
-    size: 256000,
-    createdAt: new Date("2024-01-24").getTime(),
-  },
-  {
-    id: "file_25",
-    name: "script.py",
-    size: 153600,
-    createdAt: new Date("2024-01-25").getTime(),
-  },
-  {
-    id: "file_26",
-    name: "requirements.txt",
-    size: 25600,
-    createdAt: new Date("2024-01-26").getTime(),
-  },
-  {
-    id: "file_27",
-    name: "mockup.sketch",
-    size: 10240000,
-    createdAt: new Date("2024-01-27").getTime(),
-  },
-  {
-    id: "file_28",
-    name: "changelog.md",
-    size: 76800,
-    createdAt: new Date("2024-01-28").getTime(),
-  },
-  {
-    id: "file_29",
-    name: "package.json",
-    size: 51200,
-    createdAt: new Date("2024-01-29").getTime(),
-  },
-  {
-    id: "file_30",
-    name: "index.tsx",
-    size: 204800,
-    createdAt: new Date("2024-01-30").getTime(),
-  },
-  {
-    id: "file_31",
-    name: "banner.jpg",
-    size: 2048000,
-    createdAt: new Date("2024-01-31").getTime(),
-  },
-  {
-    id: "file_32",
-    name: "survey.csv",
-    size: 512000,
-    createdAt: new Date("2024-02-01").getTime(),
-  },
-  {
-    id: "file_33",
-    name: "proposal.docx",
-    size: 1536000,
-    createdAt: new Date("2024-02-02").getTime(),
-  },
-  {
-    id: "file_34",
-    name: "analytics.xlsx",
-    size: 1024000,
-    createdAt: new Date("2024-02-03").getTime(),
-  },
-  {
-    id: "file_35",
-    name: "demo.webm",
-    size: 30720000,
-    createdAt: new Date("2024-02-04").getTime(),
-  },
-  {
-    id: "file_36",
-    name: "icons.ttf",
-    size: 512000,
-    createdAt: new Date("2024-02-05").getTime(),
-  },
-  {
-    id: "file_37",
-    name: "backup.sql",
-    size: 10240000,
-    createdAt: new Date("2024-02-06").getTime(),
-  },
-  {
-    id: "file_38",
-    name: "chart.svg",
-    size: 102400,
-    createdAt: new Date("2024-02-07").getTime(),
-  },
-  {
-    id: "file_39",
-    name: "settings.yaml",
-    size: 51200,
-    createdAt: new Date("2024-02-08").getTime(),
-  },
-  {
-    id: "file_40",
-    name: "layout.css",
-    size: 204800,
-    createdAt: new Date("2024-02-09").getTime(),
-  },
-  {
-    id: "file_41",
-    name: "report.pdf",
-    size: 3072000,
-    createdAt: new Date("2024-02-10").getTime(),
-  },
-  {
-    id: "file_42",
-    name: "background.png",
-    size: 5120000,
-    createdAt: new Date("2024-02-11").getTime(),
-  },
-  {
-    id: "file_43",
-    name: "contract.docx",
-    size: 1024000,
-    createdAt: new Date("2024-02-12").getTime(),
-  },
-  {
-    id: "file_44",
-    name: "metrics.json",
-    size: 76800,
-    createdAt: new Date("2024-02-13").getTime(),
-  },
-  {
-    id: "file_45",
-    name: "styles.scss",
-    size: 153600,
-    createdAt: new Date("2024-02-14").getTime(),
-  },
-  {
-    id: "file_46",
-    name: "avatar.jpg",
-    size: 512000,
-    createdAt: new Date("2024-02-15").getTime(),
-  },
-  {
-    id: "file_47",
-    name: "data.xml",
-    size: 102400,
-    createdAt: new Date("2024-02-16").getTime(),
-  },
-  {
-    id: "file_48",
-    name: "main.js",
-    size: 256000,
-    createdAt: new Date("2024-02-17").getTime(),
-  },
-  {
-    id: "file_49",
-    name: "readme.md",
-    size: 51200,
-    createdAt: new Date("2024-02-18").getTime(),
-  },
-  {
-    id: "file_50",
-    name: "docker-compose.yml",
-    size: 25600,
-    createdAt: new Date("2024-02-19").getTime(),
-  },
-  {
-    id: "file_51",
-    name: "schema.graphql",
-    size: 102400,
-    createdAt: new Date("2024-02-20").getTime(),
-  },
-  {
-    id: "file_52",
-    name: "robots.txt",
-    size: 12800,
-    createdAt: new Date("2024-02-21").getTime(),
-  },
-  {
-    id: "file_53",
-    name: "sitemap.xml",
-    size: 204800,
-    createdAt: new Date("2024-02-22").getTime(),
-  },
-  {
-    id: "file_54",
-    name: "favicon.ico",
-    size: 25600,
-    createdAt: new Date("2024-02-23").getTime(),
-  },
-  {
-    id: "file_55",
-    name: "webpack.config.js",
-    size: 76800,
-    createdAt: new Date("2024-02-24").getTime(),
-  },
-];
-
 export function capitalize(str: string): string {
   return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 }
-
-export const PlusIcon = ({
-  size = 24,
-  width = size,
-  height = size,
-  ...props
-}: {
-  size?: number;
-  width?: number;
-  height?: number;
-  [key: string]: any;
-}) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height={height}
-      role="presentation"
-      viewBox="0 0 24 24"
-      width={width}
-      {...props}
-    >
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-      >
-        <path d="M6 12h12" />
-        <path d="M12 18V6" />
-      </g>
-    </svg>
-  );
-};
 
 export const VerticalDotsIcon = ({
   size = 24,
@@ -506,10 +135,10 @@ type File = {
 type TableColumnKey = keyof File | "actions";
 
 export default function DataGrid() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const trpc = useTRPC();
-  const queryClient = useQueryClient();
-  const { setProgress, setUploading } = useProgress();
+  const { data: files = [], isLoading } = useQuery(
+    trpc.file.getUploadedFiles.queryOptions(),
+  );
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Set<string> | string>(
     new Set([]),
@@ -660,56 +289,6 @@ export default function DataGrid() {
     setPage(1);
   }, []);
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-
-    // Create a new tus upload
-    const upload = new tus.Upload(file, {
-      endpoint: "http://localhost:3015/files",
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      metadata: {
-        filename: file.name,
-        filetype: file.type,
-      },
-      onError: function (error) {
-        console.log("Failed because: " + error);
-      },
-      onBeforeRequest: function () {
-        setUploading(true);
-      },
-      onProgress: function (bytesUploaded, bytesTotal) {
-        const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-        console.log(bytesUploaded, bytesTotal, percentage + "%");
-        setProgress(Number(percentage));
-      },
-      onSuccess: function () {
-        setUploading(false);
-        setProgress(0);
-        queryClient.invalidateQueries({
-          queryKey: trpc.file.getUploadedFiles.queryKey(),
-        });
-      },
-    });
-
-    // Check if there are any previous uploads to continue.
-    upload.findPreviousUploads().then(function (previousUploads) {
-      // Found previous uploads so we select the first one.
-      if (previousUploads.length) {
-        upload.resumeFromPreviousUpload(previousUploads[0]);
-      }
-
-      console.log("upload");
-
-      // Start the upload
-      upload.start();
-    });
-  };
-
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -718,7 +297,7 @@ export default function DataGrid() {
             isClearable
             className="w-full sm:max-w-[44%]"
             placeholder="Search by filename..."
-            startContent={<SearchIcon />}
+            startContent={<Search />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
@@ -750,21 +329,7 @@ export default function DataGrid() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <VisuallyHidden>
-              <input
-                type="file"
-                multiple
-                ref={fileInputRef}
-                onChange={handleUpload}
-              />
-            </VisuallyHidden>
-            <Button
-              color="primary"
-              endContent={<PlusIcon width={20} height={20} />}
-              onClick={handleClick}
-            >
-              Upload File
-            </Button>
+            <Upload />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -872,7 +437,11 @@ export default function DataGrid() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No files found"} items={sortedItems}>
+      <TableBody
+        isLoading={isLoading}
+        emptyContent={"No files found"}
+        items={sortedItems}
+      >
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

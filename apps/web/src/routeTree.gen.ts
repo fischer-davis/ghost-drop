@@ -12,9 +12,10 @@
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as IndexImport } from "./routes/index";
+import { Route as SettingsImport } from "./routes/settings";
 import { Route as SigninImport } from "./routes/signin";
 import { Route as SignupImport } from "./routes/signup";
-import { Route as SettingsImport } from "./routes/settings";
+
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({

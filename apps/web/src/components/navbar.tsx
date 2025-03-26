@@ -7,11 +7,10 @@ import {
   NavbarItem,
 } from "@heroui/navbar";
 import { Progress } from "@heroui/progress";
-import UserDropdown from "./user-dropdown";
 import { Link } from "@tanstack/react-router";
+import UserDropdown from "./user-dropdown";
 
 export const Navbar = () => {
-
   return (
     <HeroUINavbar maxWidth="xl" className="flex" position="sticky">
       <NavbarContent className="flex-1" justify="start">
