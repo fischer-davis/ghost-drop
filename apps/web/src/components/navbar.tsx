@@ -1,5 +1,6 @@
 import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { useProgress } from "@/stores/useProgress.ts";
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
@@ -11,6 +12,7 @@ import { Link } from "@tanstack/react-router";
 import UserDropdown from "./user-dropdown";
 
 export const Navbar = () => {
+  const { progress } = useProgress();
   return (
     <HeroUINavbar maxWidth="xl" className="flex" position="sticky">
       <NavbarContent className="flex-1" justify="start">
@@ -27,7 +29,8 @@ export const Navbar = () => {
       </NavbarContent>
       <NavbarContent className="flex-2">
         <NavbarItem className="w-full">
-          <Progress color="secondary" value={70} />
+          {progress ? <Progress color="secondary" value={progress} /> : null}
+          {progress ? progress : null}
         </NavbarItem>
       </NavbarContent>
       <NavbarContent className="flex-1" justify="end">

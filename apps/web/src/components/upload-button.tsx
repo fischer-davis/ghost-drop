@@ -75,7 +75,7 @@ const Upload = () => {
       </VisuallyHidden>
       <Button
         color="primary"
-        endContent={<Plus size={20} />}
+        endContent={<Plus size={16} />}
         onPress={handleClick}
       >
         Upload File

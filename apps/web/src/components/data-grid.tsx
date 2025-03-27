@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@heroui/table";
 import { useQuery } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { DownloadIcon, EllipsisVertical, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 
 export const columns = [
@@ -32,96 +32,6 @@ export const columns = [
 export function capitalize(str: string): string {
   return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 }
-
-export const VerticalDotsIcon = ({
-  size = 24,
-  width = size,
-  height = size,
-  ...props
-}: {
-  size?: number;
-  width?: number;
-  height?: number;
-  [key: string]: any;
-}) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height={height}
-      role="presentation"
-      viewBox="0 0 24 24"
-      width={width}
-      {...props}
-    >
-      <path
-        d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-};
-
-export const SearchIcon = (props: { [key: string]: any }) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height="1em"
-      role="presentation"
-      viewBox="0 0 24 24"
-      width="1em"
-      {...props}
-    >
-      <path
-        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-      <path
-        d="M22 22L20 20"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-};
-
-export const ChevronDownIcon = ({
-  strokeWidth = 1.5,
-  ...otherProps
-}: {
-  strokeWidth?: number;
-  [key: string]: any;
-}) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height="1em"
-      role="presentation"
-      viewBox="0 0 24 24"
-      width="1em"
-      {...otherProps}
-    >
-      <path
-        d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeMiterlimit={10}
-        strokeWidth={strokeWidth}
-      />
-    </svg>
-  );
-};
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "size", "createdAt", "actions"];
 
@@ -143,7 +53,7 @@ export default function DataGrid() {
   const [selectedKeys, setSelectedKeys] = useState<Set<string> | string>(
     new Set([]),
   );
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
+  const [visibleColumns, _] = useState<Set<string>>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
   const [rowsPerPage, setRowsPerPage] = useState(15);
@@ -165,6 +75,7 @@ export default function DataGrid() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
+    // @ts-ignore
     let filteredFiles = [...files];
 
     if (hasSearchFilter) {
@@ -203,7 +114,7 @@ export default function DataGrid() {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon
+                  <EllipsisVertical
                     className="text-default-300"
                     width={20}
                     height={20}
@@ -211,10 +122,17 @@ export default function DataGrid() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem key="download">Download</DropdownItem>
-                <DropdownItem key="rename">Rename</DropdownItem>
+                <DropdownItem key="download">
+                  <div className="flex items-center gap-2">
+                    <DownloadIcon height={16} width={16} />
+                    Download
+                  </div>
+                </DropdownItem>
                 <DropdownItem key="delete" className="text-danger">
-                  Delete
+                  <div className="flex items-center gap-2">
+                    <Trash2 height={16} width={16} />
+                    Delete
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -255,18 +173,6 @@ export default function DataGrid() {
     return `${size.toFixed(1)} ${units[unitIndex]}`;
   }
 
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
-
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
@@ -296,39 +202,13 @@ export default function DataGrid() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by filename..."
-            startContent={<Search />}
+            placeholder="Search..."
+            startContent={<Search size={16} />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={(keys) =>
-                  setVisibleColumns(keys as Set<string>)
-                }
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
             <Upload />
           </div>
         </div>
@@ -350,13 +230,7 @@ export default function DataGrid() {
         </div>
       </div>
     );
-  }, [
-    filterValue,
-    visibleColumns,
-    onRowsPerPageChange,
-    files.length,
-    onSearchChange,
-  ]);
+  }, [filterValue, onRowsPerPageChange, files.length, onSearchChange]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -381,24 +255,7 @@ export default function DataGrid() {
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div>
+        <div className="hidden sm:flex w-[30%] justify-end gap-2"></div>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);

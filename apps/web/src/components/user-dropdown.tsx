@@ -7,8 +7,7 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { useRouter } from "@tanstack/react-router";
-import { LogOut, Settings } from "lucide-react";
-import { ChevronDownIcon } from "./data-grid";
+import { ChevronDownIcon, LogOut, Settings } from "lucide-react";
 
 export default function UserDropdown() {
   const { data: session, isPending } = authClient.useSession();
@@ -27,12 +26,7 @@ export default function UserDropdown() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button
-          variant="light"
-          endContent={
-            <ChevronDownIcon className="text-small text-default-500" />
-          }
-        >
+        <Button variant="light" endContent={<ChevronDownIcon size={20} />}>
           {isPending ? "Loading..." : session?.user?.name}
         </Button>
       </DropdownTrigger>
@@ -40,7 +34,7 @@ export default function UserDropdown() {
         <DropdownItem key="settings" onPress={onSettingsClick}>
           <div className="flex items-center gap-2">
             <div>
-              <Settings size={20} />
+              <Settings size={16} />
             </div>
             <div>Settings</div>
           </div>
@@ -53,7 +47,7 @@ export default function UserDropdown() {
         >
           <div className="flex items-center gap-2">
             <div>
-              <LogOut size={20} />
+              <LogOut size={16} />
             </div>
             <div>Logout</div>
           </div>
