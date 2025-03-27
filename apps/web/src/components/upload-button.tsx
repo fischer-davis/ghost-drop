@@ -1,21 +1,19 @@
 import { useProgress } from "@/stores/useProgress.ts";
 import { useTRPC } from "@/utils/trpc.ts";
 import { Button } from "@heroui/button";
-import { Tooltip } from "@heroui/tooltip";
+import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { useQueryClient } from "@tanstack/react-query";
-import { Upload } from "lucide-react";
-import { useRef } from "react";
+import { Plus } from "lucide-react";
+import React, { useRef } from "react";
 import * as tus from "tus-js-client";
 
 const serverPort = import.meta.env.VITE_SERVER_PORT || 3000;
 
-export default function FileUploader() {
+const Upload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setProgress, setUploading } = useProgress();
   const trpc = useTRPC();
-  const queryKey = trpc.file.getUploadedFiles.queryKey();
   const queryClient = useQueryClient();
-
+  const { setProgress, setUploading } = useProgress();
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
@@ -42,7 +40,9 @@ export default function FileUploader() {
       onSuccess: function () {
         setUploading(false);
         setProgress(0);
-        queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({
+          queryKey: trpc.file.getUploadedFiles.queryKey(),
+        });
       },
     });
 
@@ -63,21 +63,25 @@ export default function FileUploader() {
   const handleClick = () => {
     fileInputRef.current?.click();
   };
-
   return (
     <>
-      <input
-        type="file"
-        multiple
-        ref={fileInputRef}
-        onChange={handleUpload}
-        className="hidden"
-      />
-      <Tooltip content="Upload">
-        <Button isIconOnly color="secondary" onPress={handleClick}>
-          <Upload width={22} height={22} />
-        </Button>
-      </Tooltip>
+      <VisuallyHidden>
+        <input
+          type="file"
+          multiple
+          ref={fileInputRef}
+          onChange={handleUpload}
+        />
+      </VisuallyHidden>
+      <Button
+        color="primary"
+        endContent={<Plus size={16} />}
+        onPress={handleClick}
+      >
+        Upload File
+      </Button>
     </>
   );
-}
+};
+
+export default Upload;

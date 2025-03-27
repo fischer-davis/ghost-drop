@@ -1,8 +1,9 @@
 {
-  "name": "ghost-drop-server",
+  "name": "@ghostdrop-server",
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
+    "drizzle-kit": "^0.24.0",
     "tsx": "^4.19.3"
   },
   "main": "dist/index.js",
@@ -10,14 +11,29 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "test": "jest"
   },
   "peerDependencies": {
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@trpc/server": "11.0.0-rc.772",
     "@tus/file-store": "^1.5.1",
     "@tus/server": "^1.10.2",
-    "fastify": "^5.2.1"
+    "bcryptjs": "^3.0.2",
+    "better-auth": "^1.2.4",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.33.0",
+    "fastify": "^5.2.1",
+    "fastify-better-auth": "^1.0.1",
+    "request-ip": "^3.3.0",
+    "superjson": "^2.2.1",
+    "zod": "^3.24.2"
   }
 }
