@@ -1,6 +1,6 @@
 {
   "name": "ghost-drop-cli",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "CLI tool for GhostDrop file uploads and downloads",
   "bin": {
     "gd": "./src/cli.ts"

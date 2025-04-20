@@ -11,7 +11,7 @@ program
   .name("ghost")
   .alias("gd")
   .description("GhostDrop CLI - Upload and download files easily")
-  .version("1.0.0");
+  .version("0.0.0");
 
 program.addCommand(upload);
 program.addCommand(download);

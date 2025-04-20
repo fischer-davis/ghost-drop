@@ -1,6 +1,7 @@
 {
   "name": "@ghostdrop-server",
   "module": "src/index.ts",
+  "version": "0.0.0",
   "type": "module",
   "devDependencies": {
     "drizzle-kit": "^0.24.0",
